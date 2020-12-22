@@ -1,7 +1,8 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
 import { Field, ID, ObjectType } from "type-graphql";
 import { UserRegisterInput } from "../resolvers/input-types/UserRegisterInput";
+import { NotesList } from "./NotesList";
 
 @ObjectType() // type-graphql
 @Entity()     // orm
@@ -26,6 +27,9 @@ export class User {
 
    @Property()
    password!: string
+
+   @OneToMany(() => NotesList, nl => nl.user)
+   lists = new Collection<NotesList>(this)
 
    @Field(() => Date)
    @Property()
