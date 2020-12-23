@@ -1,5 +1,6 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
+import { NoteInput } from "../resolvers/input-types/NoteInput";
 import { Field, ID, ObjectType } from "type-graphql";
 import { NotesList } from "./NotesList";
 
@@ -30,6 +31,9 @@ export class Note {
    @Property({ onUpdate: () => new Date() })
    updatedAt = new Date()
 
-
+   constructor({ text, title }: NoteInput) {
+      this.title = title
+      this.text = text
+   }
 
 }

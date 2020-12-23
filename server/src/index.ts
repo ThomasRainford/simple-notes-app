@@ -10,6 +10,7 @@ import 'reflect-metadata'
 import { buildSchema } from "type-graphql"
 import { COOKIE_NAME, __prod__ } from './constants'
 import ormConfig from './mikro-orm.config'
+import { NotesListResolver } from './resolvers/notesList'
 import { UserResolver } from "./resolvers/user"
 import { OrmContext } from './types/types'
 
@@ -51,7 +52,7 @@ const main = async () => {
 
    const apolloServer = new ApolloServer({
       schema: await buildSchema({
-         resolvers: [UserResolver],
+         resolvers: [UserResolver, NotesListResolver],
          validate: false
       }),
       context: ({ req, res }: never): OrmContext => ({

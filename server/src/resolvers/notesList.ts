@@ -1,18 +1,44 @@
-import { NotesList } from "src/entities/NotesList";
-import { OrmContext } from "src/types/types";
-import { Ctx, Mutation, Resolver } from "type-graphql";
-
+import { NotesList } from "../entities/NotesList";
+import { OrmContext } from "../types/types";
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { Note } from "../entities/Note";
+import { NoteInput } from "./input-types/NoteInput";
+import { isAuth } from "../middleware/isAuth";
 
 @Resolver(NotesList)
-class NotesListResolver {
+export class NotesListResolver {
 
-   @Mutation()
-   createList(
-      @Ctx() { em, req }: OrmContext
-   ) {
+   @Mutation(() => NotesList)
+   @UseMiddleware(isAuth)
+   async createList(
+      @Ctx() { em }: OrmContext
+   ): Promise<NotesList> {
+
+      const notesList = new NotesList()
+
+      await em.persistAndFlush(notesList)
+
+      return notesList
+   }
+
+
+   @Mutation(() => Note)
+   @UseMiddleware(isAuth)
+   async addNote(
+      @Arg('listId') listId: string,
+      @Arg('noteInput') noteInput: NoteInput,
+      @Ctx() { em }: OrmContext
+   ): Promise<Note> {
 
       const repo = em.getRepository(NotesList)
+      const list = await repo.findOne({ id: listId })
 
+      const note = new Note(noteInput)
+      list?.notes.add(note)
+
+      await em.persistAndFlush(note)
+
+      return note
    }
 
 }
