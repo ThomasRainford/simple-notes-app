@@ -1,7 +1,7 @@
 import { NotesList } from "../entities/NotesList";
 import { OrmContext } from "../types/types";
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
-import { Note } from "../entities/Note";
+import { Note } from "./object-types/Note";
 import { NoteInput } from "./input-types/NoteInput";
 import { isAuth } from "../middleware/isAuth";
 
@@ -14,31 +14,34 @@ export class NotesListResolver {
       @Ctx() { em }: OrmContext
    ): Promise<NotesList> {
 
-      const notesList = new NotesList()
+      const notesList = new NotesList([])
 
       await em.persistAndFlush(notesList)
 
       return notesList
    }
 
-
-   @Mutation(() => Note)
+   @Mutation(() => NotesList, { nullable: true })
    @UseMiddleware(isAuth)
    async addNote(
       @Arg('listId') listId: string,
       @Arg('noteInput') noteInput: NoteInput,
       @Ctx() { em }: OrmContext
-   ): Promise<Note> {
+   ): Promise<NotesList | null> {
 
       const repo = em.getRepository(NotesList)
       const list = await repo.findOne({ id: listId })
 
       const note = new Note(noteInput)
-      list?.notes.push(note)
 
-      await em.persistAndFlush(note)
+      if (list) {
+         list.notes = [...list.notes, note]
+         em.persistAndFlush(list)
 
-      return note
+         return list
+      }
+
+      return null
    }
 
 }
