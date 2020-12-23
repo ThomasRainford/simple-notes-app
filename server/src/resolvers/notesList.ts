@@ -34,7 +34,7 @@ export class NotesListResolver {
       const list = await repo.findOne({ id: listId })
 
       const note = new Note(noteInput)
-      list?.notes.add(note)
+      list?.notes.push(note)
 
       await em.persistAndFlush(note)
 
