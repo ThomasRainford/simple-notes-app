@@ -16,6 +16,7 @@ export class NotesList {
    @SerializedPrimaryKey()
    id: string
 
+   @Field(() => User)
    @ManyToOne()
    user: User
 
