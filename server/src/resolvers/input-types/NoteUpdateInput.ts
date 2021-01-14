@@ -3,10 +3,10 @@ import { Field, InputType } from "type-graphql";
 @InputType()
 export class NoteUpdateInput {
 
-   @Field()
-   title: string
+   @Field({ nullable: true })
+   title?: string
 
-   @Field()
-   text: string
+   @Field({ nullable: true })
+   text?: string
 
 }

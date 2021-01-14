@@ -14,11 +14,11 @@ export class NotesListResolver {
    @UseMiddleware(isAuth)
    async getNotesList(
       @Arg('listId') listId: string,
-      @Ctx() { em }: OrmContext,
+      @Ctx() { em, req }: OrmContext,
    ): Promise<NotesList | null> {
 
       const repo = em.getRepository(NotesList)
-      const list = await repo.findOne({ id: listId })
+      const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
       if (!list) {
          return null
@@ -32,12 +32,12 @@ export class NotesListResolver {
    @UseMiddleware(isAuth)
    async getNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
-      @Ctx() { em }: OrmContext,
+      @Ctx() { em, req }: OrmContext,
    ): Promise<Note | null> {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: noteLocation.listId })
+      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
       const note = list?.notes.find(note => note.id === noteLocation.noteId)
 
       if (!list || !note) {
@@ -65,11 +65,11 @@ export class NotesListResolver {
    async addNote(
       @Arg('listId') listId: string,
       @Arg('noteInput') noteInput: NoteInput,
-      @Ctx() { em }: OrmContext
+      @Ctx() { em, req }: OrmContext
    ): Promise<NotesList | null> {
 
       const repo = em.getRepository(NotesList)
-      const list = await repo.findOne({ id: listId })
+      const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
       if (!list) {
          return null
@@ -86,15 +86,38 @@ export class NotesListResolver {
    //TODO: Add update note, add delete note, add delete noteList.
 
    @Mutation(() => Note, { nullable: true })
-   updateNote(
+   async updateNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
       @Arg('updatedNoteFields') updatedNoteFields: NoteUpdateInput,
-      @Ctx() { em }: OrmContext
-   ): Note | null {
+      @Ctx() { em, req }: OrmContext
+   ): Promise<Note | null> {
 
       const repo = em.getRepository(NotesList)
+      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
 
-      return null
+      if (!list) {
+         return null
+      }
+
+      const note = list?.notes.find(note => note.id === noteLocation.noteId)
+
+      if (!note) {
+         return null
+      }
+
+      Object.keys(note).forEach((key) => {
+         if (key === 'title' || key === 'text') {
+            if (updatedNoteFields[key]) {
+               const updated = updatedNoteFields[key] as string
+               note[key] = updated
+            }
+
+         }
+      })
+
+      em.persistAndFlush(list)
+
+      return note
    }
 
 }
