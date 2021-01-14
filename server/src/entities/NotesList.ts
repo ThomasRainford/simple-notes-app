@@ -16,6 +16,10 @@ export class NotesList {
    @SerializedPrimaryKey()
    id: string
 
+   @Field(() => String)
+   @Property()
+   userId: string | undefined
+
    @Field(() => User)
    @ManyToOne()
    user: User
@@ -32,7 +36,8 @@ export class NotesList {
    @Property({ onUpdate: () => new Date() })
    updatedAt = new Date()
 
-   constructor(notes: Note[]) {
+   constructor(notes: Note[], userId: string | undefined) {
+      this.userId = userId
       this.notes = notes
    }
 
