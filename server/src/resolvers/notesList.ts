@@ -83,8 +83,6 @@ export class NotesListResolver {
       return list
    }
 
-   //TODO: Add update note, add delete note, add delete noteList.
-
    @Mutation(() => Note, { nullable: true })
    async updateNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
@@ -119,5 +117,7 @@ export class NotesListResolver {
 
       return note
    }
+
+   // TODO: add delete note, add delete noteList.
 
 }
