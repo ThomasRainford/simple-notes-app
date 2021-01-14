@@ -18,6 +18,7 @@ export class NotesListResolver {
    ): Promise<NotesList | null> {
 
       const repo = em.getRepository(NotesList)
+
       const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
       if (!list) {
@@ -69,6 +70,7 @@ export class NotesListResolver {
    ): Promise<NotesList | null> {
 
       const repo = em.getRepository(NotesList)
+
       const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
       if (!list) {
@@ -91,15 +93,11 @@ export class NotesListResolver {
    ): Promise<Note | null> {
 
       const repo = em.getRepository(NotesList)
+
       const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
-
-      if (!list) {
-         return null
-      }
-
       const note = list?.notes.find(note => note.id === noteLocation.noteId)
 
-      if (!note) {
+      if (!list || !note) {
          return null
       }
 
@@ -118,6 +116,25 @@ export class NotesListResolver {
       return note
    }
 
-   // TODO: add delete note, add delete noteList.
+   @Mutation(() => Boolean)
+   async deleteNotesList(
+      @Arg('listId') listId: string,
+      @Ctx() { em, req }: OrmContext
+   ): Promise<boolean> {
+
+      const repo = em.getRepository(NotesList)
+
+      const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+
+      const del = await em.nativeDelete(NotesList, { _id: list?._id })
+
+      if (del === 0) {
+         return false
+      }
+
+      return true
+   }
+
+   // TODO: add delete note
 
 }
