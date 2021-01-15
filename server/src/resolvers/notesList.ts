@@ -155,7 +155,7 @@ export class NotesListResolver {
       }
 
       const newNotes = list.notes.filter((currentNote) => {
-         return note === currentNote
+         return note !== currentNote
       })
 
       list.notes = newNotes
