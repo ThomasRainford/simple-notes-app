@@ -86,6 +86,7 @@ export class NotesListResolver {
    }
 
    @Mutation(() => Note, { nullable: true })
+   @UseMiddleware(isAuth)
    async updateNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
       @Arg('updatedNoteFields') updatedNoteFields: NoteUpdateInput,
@@ -107,7 +108,6 @@ export class NotesListResolver {
                const updated = updatedNoteFields[key] as string
                note[key] = updated
             }
-
          }
       })
 
@@ -117,6 +117,7 @@ export class NotesListResolver {
    }
 
    @Mutation(() => Boolean)
+   @UseMiddleware(isAuth)
    async deleteNotesList(
       @Arg('listId') listId: string,
       @Ctx() { em, req }: OrmContext
@@ -136,5 +137,32 @@ export class NotesListResolver {
    }
 
    // TODO: add delete note
+
+   @Mutation(() => Boolean)
+   @UseMiddleware(isAuth)
+   async deleteNote(
+      @Arg('noteLocation') noteLocation: NoteLocationInput,
+      @Ctx() { em, req }: OrmContext
+   ): Promise<boolean> {
+
+      const repo = em.getRepository(NotesList)
+
+      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const note = list?.notes.find(note => note.id === noteLocation.noteId)
+
+      if (!list || !note) {
+         return false
+      }
+
+      const newNotes = list.notes.filter((currentNote) => {
+         return note === currentNote
+      })
+
+      list.notes = newNotes
+
+      em.persistAndFlush(list)
+
+      return true
+   }
 
 }

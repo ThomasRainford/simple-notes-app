@@ -1,4 +1,3 @@
-import { NotesList } from "src/entities/NotesList";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
