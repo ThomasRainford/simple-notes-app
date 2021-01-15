@@ -136,8 +136,6 @@ export class NotesListResolver {
       return true
    }
 
-   // TODO: add delete note
-
    @Mutation(() => Boolean)
    @UseMiddleware(isAuth)
    async deleteNote(
