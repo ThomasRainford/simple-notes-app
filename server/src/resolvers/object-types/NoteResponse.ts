@@ -1,12 +1,12 @@
-import { NotesList } from "../../entities/NotesList";
 import { Field, ObjectType } from "type-graphql";
+import { Note } from "./Note";
 import { Error } from './Error'
 
 @ObjectType()
-export class NotesListResponse {
+export class NoteResponse {
 
-   @Field(() => NotesList, { nullable: true })
-   notesList?: NotesList
+   @Field(() => Note, { nullable: true })
+   note?: Note
 
    @Field(() => [Error], { nullable: true })
    errors?: Error[]

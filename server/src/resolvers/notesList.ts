@@ -7,6 +7,7 @@ import { isAuth } from "../middleware/isAuth";
 import { NoteLocationInput } from "./input-types/NoteLocationInput";
 import { NoteUpdateInput } from "./input-types/NoteUpdateInput";
 import { NotesListResponse } from "./object-types/NotesListResponse";
+import { NoteResponse } from "./object-types/NoteResponse";
 
 @Resolver(NotesList)
 export class NotesListResolver {
@@ -33,29 +34,44 @@ export class NotesListResolver {
          }
       }
 
-      return {
-         notesList
-      }
+      return { notesList }
    }
 
-
-   @Query(() => Note, { nullable: true })
+   @Query(() => NoteResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async getNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
       @Ctx() { em, req }: OrmContext,
-   ): Promise<Note | null> {
+   ): Promise<NoteResponse> {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
-      const note = list?.notes.find(note => note.id === noteLocation.noteId)
+      const notesList = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const note = notesList?.notes.find(note => note.id === noteLocation.noteId)
 
-      if (!list || !note) {
-         return null
+      if (!notesList) {
+         return {
+            errors: [
+               {
+                  property: 'notesList',
+                  message: 'List does not exist.'
+               }
+            ]
+         }
       }
 
-      return note
+      if (!note) {
+         return {
+            errors: [
+               {
+                  property: 'note',
+                  message: 'Note does not exist.'
+               }
+            ]
+         }
+      }
+
+      return { note }
    }
 
    @Mutation(() => NotesList)
@@ -119,26 +135,42 @@ export class NotesListResolver {
       notesList.notes = [...notesList.notes, note]
       em.persistAndFlush(notesList)
 
-      return {
-         notesList
-      }
+      return { notesList }
    }
 
-   @Mutation(() => Note, { nullable: true })
+   @Mutation(() => NoteResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async updateNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
       @Arg('updatedNoteFields') updatedNoteFields: NoteUpdateInput,
       @Ctx() { em, req }: OrmContext
-   ): Promise<Note | null> {
+   ): Promise<NoteResponse> {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
-      const note = list?.notes.find(note => note.id === noteLocation.noteId)
+      const notesList = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const note = notesList?.notes.find(note => note.id === noteLocation.noteId)
 
-      if (!list || !note) {
-         return null
+      if (!notesList) {
+         return {
+            errors: [
+               {
+                  property: 'notesList',
+                  message: 'List does not exist.'
+               }
+            ]
+         }
+      }
+
+      if (!note) {
+         return {
+            errors: [
+               {
+                  property: 'note',
+                  message: 'Note does not exist.'
+               }
+            ]
+         }
       }
 
       Object.keys(note).forEach((key) => {
@@ -150,9 +182,9 @@ export class NotesListResolver {
          }
       })
 
-      em.persistAndFlush(list)
+      em.persistAndFlush(notesList)
 
-      return note
+      return { note }
    }
 
    @Mutation(() => Boolean)
