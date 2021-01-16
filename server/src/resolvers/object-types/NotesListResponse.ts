@@ -18,7 +18,7 @@ export class NotesListResponse {
    @Field(() => NotesList, { nullable: true })
    notesList?: NotesList
 
-   @Field(() => Error, { nullable: true })
-   errors: Error
+   @Field(() => [Error], { nullable: true })
+   errors: Error[]
 
 }
