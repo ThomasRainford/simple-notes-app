@@ -139,21 +139,39 @@ export class NotesListResolver {
       return { notesList }
    }
 
-   @Mutation(() => Note, { nullable: true })
+   @Mutation(() => NoteResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async updateNote(
       @Arg('noteLocation') noteLocation: NoteLocationInput,
       @Arg('updatedNoteFields') updatedNoteFields: NoteUpdateInput,
       @Ctx() { em, req }: OrmContext
-   ): Promise<Note | null> {
+   ): Promise<NoteResponse> {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
-      const note = list?.notes.find(note => note.id === noteLocation.noteId)
+      const notesList = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const note = notesList?.notes.find(note => note.id === noteLocation.noteId)
 
-      if (!list || !note) {
-         return null
+      if (!notesList) {
+         return {
+            errors: [
+               {
+                  property: 'notesList',
+                  message: 'List does not exist.'
+               }
+            ]
+         }
+      }
+
+      if (!note) {
+         return {
+            errors: [
+               {
+                  property: 'note',
+                  message: 'Note does not exist.'
+               }
+            ]
+         }
       }
 
       Object.keys(note).forEach((key) => {
@@ -165,9 +183,9 @@ export class NotesListResolver {
          }
       })
 
-      em.persistAndFlush(list)
+      em.persistAndFlush(notesList)
 
-      return note
+      return { note }
    }
 
    @Mutation(() => Boolean)
