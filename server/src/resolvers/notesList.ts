@@ -6,26 +6,36 @@ import { NoteInput } from "./input-types/NoteInput";
 import { isAuth } from "../middleware/isAuth";
 import { NoteLocationInput } from "./input-types/NoteLocationInput";
 import { NoteUpdateInput } from "./input-types/NoteUpdateInput";
+import { NotesListResponse } from "./object-types/NotesListResponse";
 
 @Resolver(NotesList)
 export class NotesListResolver {
 
-   @Query(() => NotesList, { nullable: true })
+   @Query(() => NotesListResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async getNotesList(
       @Arg('listId') listId: string,
       @Ctx() { em, req }: OrmContext,
-   ): Promise<NotesList | null> {
+   ): Promise<NotesListResponse> {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+      const notesList = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
-      if (!list) {
-         return null
+      if (!notesList) {
+         return {
+            errors: [
+               {
+                  property: 'list',
+                  message: 'List does not exist.'
+               }
+            ]
+         }
       }
 
-      return list
+      return {
+         notesList
+      }
    }
 
 
@@ -61,28 +71,37 @@ export class NotesListResolver {
       return notesList
    }
 
-   @Mutation(() => NotesList, { nullable: true })
+   @Mutation(() => NotesListResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async addNote(
       @Arg('listId') listId: string,
       @Arg('noteInput') noteInput: NoteInput,
       @Ctx() { em, req }: OrmContext
-   ): Promise<NotesList | null> {
+   ): Promise<NotesListResponse> {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+      const notesList = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
-      if (!list) {
-         return null
+      if (!notesList) {
+         return {
+            errors: [
+               {
+                  property: 'notesList',
+                  message: 'List does not exist.'
+               }
+            ]
+         }
       }
 
       const note = new Note(noteInput)
 
-      list.notes = [...list.notes, note]
-      em.persistAndFlush(list)
+      notesList.notes = [...notesList.notes, note]
+      em.persistAndFlush(notesList)
 
-      return list
+      return {
+         notesList
+      }
    }
 
    @Mutation(() => Note, { nullable: true })
