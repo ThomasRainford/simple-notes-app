@@ -94,6 +94,26 @@ export class NotesListResolver {
          }
       }
 
+      // Check if the 'noteInput.title' already exists.
+      let titleExists = false
+      notesList.notes.forEach((note: Note) => {
+         if (note.title === noteInput.title) {
+            titleExists = true
+         }
+      })
+
+      // If it does return an error.
+      if (titleExists) {
+         return {
+            errors: [
+               {
+                  property: 'noteInput',
+                  message: 'Title already exists.'
+               }
+            ]
+         }
+      }
+
       const note = new Note(noteInput)
 
       notesList.notes = [...notesList.notes, note]
