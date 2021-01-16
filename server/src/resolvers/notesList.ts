@@ -125,9 +125,9 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+      const listToDelete = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
 
-      const del = await em.nativeDelete(NotesList, { _id: list?._id })
+      const del = await em.nativeDelete(NotesList, { _id: listToDelete?._id })
 
       if (del === 0) {
          return false
@@ -146,14 +146,15 @@ export class NotesListResolver {
       const repo = em.getRepository(NotesList)
 
       const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
-      const note = list?.notes.find(note => note.id === noteLocation.noteId)
+      const noteToDelete = list?.notes.find(note => note.id === noteLocation.noteId)
 
-      if (!list || !note) {
+      if (!list || !noteToDelete) {
          return false
       }
 
-      const newNotes = list.notes.filter((currentNote) => {
-         return note !== currentNote
+      // Filter out noteToDelete
+      const newNotes: Note[] = list.notes.filter((currentNote) => {
+         return currentNote !== noteToDelete
       })
 
       list.notes = newNotes
