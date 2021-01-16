@@ -37,7 +37,6 @@ export class NotesListResolver {
       return { notesList }
    }
 
-
    @Query(() => NoteResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async getNote(
