@@ -23,7 +23,7 @@ export class UserResolver {
 
       const repo = em.getRepository(User)
 
-      const user = await repo.findOne({ _id: req.session.userId })
+      const user = await repo.findOne({ _id: req.session.userId }, ['lists'])
 
       return user
    }
@@ -62,6 +62,7 @@ export class UserResolver {
          username,
          password: hashedPassword,
       })
+      await em.populate(user, ['lists'])
 
       await em.persistAndFlush(user)
 

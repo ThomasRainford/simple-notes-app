@@ -8,6 +8,7 @@ import { NoteLocationInput } from "./input-types/NoteLocationInput";
 import { NoteUpdateInput } from "./input-types/NoteUpdateInput";
 import { NotesListResponse } from "./object-types/NotesListResponse";
 import { NoteResponse } from "./object-types/NoteResponse";
+import { User } from "../entities/User";
 
 @Resolver(NotesList)
 export class NotesListResolver {
@@ -21,7 +22,7 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const notesList = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+      const notesList = await repo.findOne({ id: listId, user: req.session.userId }, ['user'])
 
       if (!notesList) {
          return {
@@ -46,7 +47,7 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const notesList = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const notesList = await repo.findOne({ id: noteLocation.listId, user: req.session.userId }, ['user'])
       const note = notesList?.notes.find(note => note.id === noteLocation.noteId)
 
       if (!notesList) {
@@ -80,7 +81,14 @@ export class NotesListResolver {
       @Ctx() { em, req }: OrmContext,
    ): Promise<NotesList> {
 
-      const notesList = new NotesList([], req.session['userId']?.toString())
+      const notesList = new NotesList([])
+
+      const user = await em.getRepository(User).findOne({ id: req.session['userId']?.toString() })
+
+      if (user) {
+         notesList.user = user
+         user.lists.add(notesList)
+      }
 
       await em.persistAndFlush(notesList)
 
@@ -97,7 +105,7 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const notesList = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+      const notesList = await repo.findOne({ id: listId, user: req.session.userId }, ['user'])
 
       if (!notesList) {
          return {
@@ -148,7 +156,7 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const notesList = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const notesList = await repo.findOne({ id: noteLocation.listId, user: req.session.userId }, ['user'])
       const note = notesList?.notes.find(note => note.id === noteLocation.noteId)
 
       if (!notesList) {
@@ -196,7 +204,7 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const listToDelete = await repo.findOne({ id: listId, userId: req.session['userId']?.toString() })
+      const listToDelete = await repo.findOne({ id: listId, user: req.session.userId }, ['user'])
 
       const del = await em.nativeDelete(NotesList, { _id: listToDelete?._id })
 
@@ -216,7 +224,7 @@ export class NotesListResolver {
 
       const repo = em.getRepository(NotesList)
 
-      const list = await repo.findOne({ id: noteLocation.listId, userId: req.session['userId']?.toString() })
+      const list = await repo.findOne({ id: noteLocation.listId, user: req.session.userId }, ['user'])
       const noteToDelete = list?.notes.find(note => note.id === noteLocation.noteId)
 
       if (!list || !noteToDelete) {
