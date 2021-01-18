@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Box, Center, Flex } from '@chakra-ui/react'
+=======
+import { Box, Center, Flex, Input, Stack, Text } from '@chakra-ui/react'
+>>>>>>> register-page
 import React from 'react'
 
 interface Props {
