@@ -1,13 +1,13 @@
-import { Box, Button, Center, Divider, Flex, Heading, Input, Stack, Text } from '@chakra-ui/react'
+import { Box, Center, Flex } from '@chakra-ui/react'
 import React from 'react'
-import AccountLayout from '../../components/account/AccountLayout'
 
 interface Props {
 
 }
 
-const Register = ({ }) => {
+const Register = (props: Props) => {
    return (
+<<<<<<< HEAD
       <AccountLayout
          heading="Create an account"
          action="Create Account"
@@ -21,6 +21,13 @@ const Register = ({ }) => {
             <Input placeholder="Enter Password" />
          </Stack>
       </AccountLayout>
+=======
+      <Flex mt="50%">
+         <Flex>
+            Register
+         </Flex>
+      </Flex>
+>>>>>>> 2c95ffcf1b8dc7fca23da6a091b86ff0c0e53f26
    )
 }
 
