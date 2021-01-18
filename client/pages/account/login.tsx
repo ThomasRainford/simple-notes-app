@@ -16,10 +16,6 @@ const validatePassword = () => {
    return true
 }
 
-const onSubmit = (input) => {
-   console.log(input)
-}
-
 const link = (): JSX.Element => (
    <NextLink href={'/account/register'}>
       <Link color="white" pt="1%">
@@ -28,30 +24,18 @@ const link = (): JSX.Element => (
    </NextLink >
 )
 
-const button = (formState: FormState<Record<string, any>>): JSX.Element => {
-
-   return (
-      <Button
-         colorScheme="blue"
-         isLoading={formState.isSubmitting}
-         type="submit"
-         mt='10%'
-      >
-         Login
-      </Button>
-   )
-}
-
 const Login = ({ }) => {
 
    const { handleSubmit, errors, register, formState } = useForm();
-   console.log(errors)
+
+   const onSubmit = (input) => {
+      console.log(input)
+   }
 
    return (
       <AccountLayout
          heading="Login"
          link={link()}
-         submitButton={button(formState)}
       >
          <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={errors.usernameOrEmail}>
@@ -78,6 +62,14 @@ const Login = ({ }) => {
                   {errors.password && errors.password.message}
                </FormErrorMessage>
             </FormControl>
+            <Button
+               colorScheme="blue"
+               isLoading={formState.isSubmitting}
+               type="submit"
+               mt='10%'
+            >
+               Login
+            </Button>
          </form>
       </AccountLayout>
    )

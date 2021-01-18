@@ -9,6 +9,18 @@ interface Props {
 
 }
 
+const validateUsername = () => {
+   return true
+}
+
+const validateEmail = () => {
+   return true
+}
+
+const validatePassword = () => {
+   return true
+}
+
 const link = (): JSX.Element => (
    <NextLink href={'/account/login'}>
       <Link color="white" pt="1%">
@@ -17,46 +29,25 @@ const link = (): JSX.Element => (
    </NextLink >
 )
 
-const button = (formState: FormState<Record<string, any>>): JSX.Element => {
-   const [{ }, register] = useRegisterMutation()
-
-   return (
-      <Button
-         colorScheme="blue"
-         isLoading={formState.isSubmitting}
-         type="submit"
-         mt='10%'
-      >
-         Create Account
-      </Button>
-   )
-}
-
 const Register = ({ }) => {
 
    const { handleSubmit, errors, register, formState } = useForm();
 
-   const validateUsername = () => {
-      return true
-   }
+   const [result, executeRegister] = useRegisterMutation()
 
-   const validateEmail = () => {
-      return true
-   }
+   const onSubmit = async (registerInput: UserRegisterInput) => {
 
-   const validatePassword = () => {
-      return true
-   }
+      console.log(result)
 
-   const onSubmit = (input: UserRegisterInput) => {
-      console.log(input)
+      const response = await executeRegister({ registerInput })
+
+      console.log(response)
    }
 
    return (
       <AccountLayout
          heading="Create an Account"
          link={link()}
-         submitButton={button(formState)}
       >
          <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={errors.username}>
@@ -96,6 +87,14 @@ const Register = ({ }) => {
                   {errors.password && errors.password.message}
                </FormErrorMessage>
             </FormControl>
+            <Button
+               colorScheme="blue"
+               isLoading={formState.isSubmitting}
+               type="submit"
+               mt='10%'
+            >
+               Create Account
+            </Button>
          </form>
       </AccountLayout>
    )
