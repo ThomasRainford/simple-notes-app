@@ -1,6 +1,5 @@
-import { Button, Center, Divider, Flex, Text, Link } from '@chakra-ui/react'
+import { Center, Divider, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
-import NextLink from 'next/link'
 
 interface Props {
    heading: string
@@ -17,7 +16,7 @@ const AccountLayout = ({ children, heading, link, submitButton }) => {
                <Divider orientation="horizontal" />
             </Center>
             {children}
-            {submitButton}
+            {/*submitButton*/}
          </Flex>
          {link}
       </Flex>
