@@ -16,7 +16,7 @@ const AccountLayout = ({ children, heading, link, submitButton }) => {
                <Divider orientation="horizontal" />
             </Center>
             {children}
-            {/*submitButton*/}
+            {submitButton}
          </Flex>
          {link}
       </Flex>

@@ -1,7 +1,7 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
-import { useForm } from "react-hook-form"
+import { FormState, useForm } from "react-hook-form"
 import AccountLayout from '../../components/account/AccountLayout'
 import { useRegisterMutation, UserRegisterInput } from '../../generated/graphql'
 
@@ -17,12 +17,15 @@ const link = (): JSX.Element => (
    </NextLink >
 )
 
-const button = (): JSX.Element => {
+const button = (formState: FormState<Record<string, any>>): JSX.Element => {
    const [{ }, register] = useRegisterMutation()
 
    return (
       <Button
          colorScheme="blue"
+         isLoading={formState.isSubmitting}
+         type="submit"
+         mt='10%'
       >
          Create Account
       </Button>
@@ -53,10 +56,10 @@ const Register = ({ }) => {
       <AccountLayout
          heading="Create an Account"
          link={link()}
-         submitButton={button()}
+         submitButton={button(formState)}
       >
          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={errors.name}>
+            <FormControl isInvalid={errors.username}>
                <FormLabel>Username</FormLabel>
                <Input
                   name="username"
@@ -64,11 +67,11 @@ const Register = ({ }) => {
                   ref={register({ validate: validateUsername })}
                />
                <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.username && errors.username.message}
                </FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={errors.name}>
+            <FormControl isInvalid={errors.email}>
                <FormLabel>Email</FormLabel>
                <Input
                   name="email"
@@ -77,11 +80,11 @@ const Register = ({ }) => {
                   ref={register({ validate: validateEmail })}
                />
                <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.email && errors.email.message}
                </FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={errors.name}>
+            <FormControl isInvalid={errors.password}>
                <FormLabel>Password</FormLabel>
                <Input
                   name="password"
@@ -90,13 +93,9 @@ const Register = ({ }) => {
                   ref={register({ validate: validatePassword })}
                />
                <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.password && errors.password.message}
                </FormErrorMessage>
             </FormControl>
-
-            <Button mt={4} colorScheme="teal" isLoading={formState.isSubmitting} type="submit">
-               Submit
-            </Button>
          </form>
       </AccountLayout>
    )

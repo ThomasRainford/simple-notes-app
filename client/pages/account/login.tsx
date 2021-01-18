@@ -1,7 +1,7 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { FormState, useForm } from 'react-hook-form'
 import AccountLayout from '../../components/account/AccountLayout'
 
 interface Props {
@@ -28,22 +28,33 @@ const link = (): JSX.Element => (
    </NextLink >
 )
 
-const button = (): JSX.Element => (
-   <Button colorScheme="blue">Create Account</Button>
-)
+const button = (formState: FormState<Record<string, any>>): JSX.Element => {
+
+   return (
+      <Button
+         colorScheme="blue"
+         isLoading={formState.isSubmitting}
+         type="submit"
+         mt='10%'
+      >
+         Login
+      </Button>
+   )
+}
 
 const Login = ({ }) => {
 
    const { handleSubmit, errors, register, formState } = useForm();
+   console.log(errors)
 
    return (
       <AccountLayout
          heading="Login"
          link={link()}
-         submitButton={button()}
+         submitButton={button(formState)}
       >
          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={errors.name}>
+            <FormControl isInvalid={errors.usernameOrEmail}>
                <FormLabel>Username or Email</FormLabel>
                <Input
                   name="usernameOrEmail"
@@ -51,11 +62,11 @@ const Login = ({ }) => {
                   ref={register({ validate: validateUsernameOrEmail })}
                />
                <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.usernameOrEmail && errors.usernameOrEmail.message}
                </FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={errors.name}>
+            <FormControl isInvalid={errors.password}>
                <FormLabel>Password</FormLabel>
                <Input
                   name="password"
@@ -64,13 +75,9 @@ const Login = ({ }) => {
                   ref={register({ validate: validatePassword })}
                />
                <FormErrorMessage>
-                  {errors.name && errors.name.message}
+                  {errors.password && errors.password.message}
                </FormErrorMessage>
             </FormControl>
-
-            <Button mt={4} colorScheme="teal" isLoading={formState.isSubmitting} type="submit">
-               Submit
-            </Button>
          </form>
       </AccountLayout>
    )
