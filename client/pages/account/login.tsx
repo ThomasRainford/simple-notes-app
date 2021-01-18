@@ -12,7 +12,7 @@ const Login = ({ }) => {
          heading="Login"
          action="Login"
       >
-         <Stack spacing="3" pb="4%">
+         <Stack spacing="3" pb="10%">
             <Text fontSize="sm">Email or Username</Text>
             <Input placeholder="Enter Email or Username" />
             <Text fontSize="sm">Password</Text>

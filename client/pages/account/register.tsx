@@ -12,7 +12,7 @@ const Register = ({ }) => {
          heading="Create an account"
          action="Create Account"
       >
-         <Stack spacing="3" pb="4%">
+         <Stack spacing="3" pb="10%">
             <Text fontSize="sm">Username</Text>
             <Input placeholder="Enter Username" />
             <Text fontSize="sm">Email</Text>
