@@ -8,7 +8,10 @@ interface Props {
 
 const Login = ({ }) => {
    return (
-      <AccountLayout heading="Login" action="Login">
+      <AccountLayout
+         heading="Login"
+         action="Login"
+      >
          <Stack spacing="3" pb="4%">
             <Text fontSize="sm">Email or Username</Text>
             <Input placeholder="Enter Email or Username" />

@@ -8,7 +8,10 @@ interface Props {
 
 const Register = ({ }) => {
    return (
-      <AccountLayout heading="Create an account" action="Create Account">
+      <AccountLayout
+         heading="Create an account"
+         action="Create Account"
+      >
          <Stack spacing="3" pb="4%">
             <Text fontSize="sm">Username</Text>
             <Input placeholder="Enter Username" />
