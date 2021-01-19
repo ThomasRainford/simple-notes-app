@@ -30,6 +30,24 @@ export class NotesListResolver {
       return allNotesLists
    }
 
+   @Query(() => [Note], { nullable: true })
+   @UseMiddleware(isAuth)
+   async getAllNotes(
+      @Arg('listId') listId: string,
+      @Ctx() { em, req }: OrmContext
+   ): Promise<Note[] | null> {
+
+      const repo = em.getRepository(NotesList)
+
+      const notesList = await repo.findOne({ id: listId, user: req.session.userId }, ['user'])
+
+      if (!notesList) {
+         return null
+      }
+
+      return notesList.notes
+   }
+
    @Query(() => NotesListResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async getNotesList(
