@@ -1,16 +1,18 @@
 import argon2 from "argon2"
 import { COOKIE_NAME } from "../constants"
 import { OrmContext } from "../types/types"
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql"
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql"
 import { User } from "../entities/User"
 import { UserRegisterInput } from "./input-types/UserRegisterInput"
 import { UserResponse } from './object-types/UserResponse'
 import { validateRegister } from '../utils/validateRegister'
+import { isAuth } from "../middleware/isAuth"
 
 @Resolver(User)
 export class UserResolver {
 
    @Query(() => User, { nullable: true })
+   @UseMiddleware(isAuth)
    async me(
       @Ctx() { em, req }: OrmContext
    ): Promise<User | null> {
@@ -147,6 +149,7 @@ export class UserResolver {
    }
 
    @Mutation(() => UserResponse)
+   @UseMiddleware(isAuth)
    async updateUser(
       @Ctx() { em, req }: OrmContext,
       @Arg('username', { nullable: true }) username?: string,
