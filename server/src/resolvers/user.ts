@@ -89,14 +89,12 @@ export class UserResolver {
       const repo = em.getRepository(User)
 
       const isEmail = usernameOrEmail.includes('@')
-      console.log('isEmail: ', isEmail)
       const user = await repo.findOne(isEmail
          ? {
             email: usernameOrEmail
          } : {
             username: usernameOrEmail
          })
-      console.log('User:', user?.password)
 
       // Validate usernameOrEmail.
       if (!user) {

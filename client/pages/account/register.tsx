@@ -1,4 +1,5 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
+import { useRouter } from 'next/dist/client/router'
 import NextLink from 'next/link'
 import React from 'react'
 import { FormState, useForm } from "react-hook-form"
@@ -32,7 +33,7 @@ const link = (): JSX.Element => (
 const Register = ({ }) => {
 
    const { handleSubmit, errors, register, formState } = useForm();
-
+   const router = useRouter()
    const [result, executeRegister] = useRegisterMutation()
 
    const onSubmit = async (registerInput: UserRegisterInput) => {
@@ -41,7 +42,9 @@ const Register = ({ }) => {
 
       const response = await executeRegister({ registerInput })
 
-      console.log(response)
+      console.log(response.data?.register.user?.username)
+
+      router.push('/')
    }
 
    return (

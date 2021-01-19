@@ -1,4 +1,5 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
+import { useRouter } from 'next/dist/client/router'
 import NextLink from 'next/link'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -28,8 +29,9 @@ const link = (): JSX.Element => (
 const Login = ({ }) => {
 
    const { handleSubmit, errors, register, formState } = useForm()
-
+   const router = useRouter()
    const [result, executeLogin] = useLoginMutation()
+
 
    const onSubmit = async (loginInput: LoginMutationVariables) => {
 
@@ -37,7 +39,9 @@ const Login = ({ }) => {
 
       const response = await executeLogin(loginInput)
 
-      console.log(response)
+      console.log(response.data?.login.user?.username)
+
+      router.push('/')
    }
 
    return (
