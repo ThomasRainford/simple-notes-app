@@ -122,8 +122,6 @@ export class UserResolver {
       // log the user in
       req.session.userId = user._id
 
-      //console.log(req.session.userId)
-
       return {
          user
       }

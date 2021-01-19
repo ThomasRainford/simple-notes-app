@@ -5,6 +5,10 @@ import { createClient, Provider } from 'urql';
 
 const client = createClient({
   url: 'http://localhost:3000/graphql',
+  fetchOptions: {
+    credentials: 'include'
+  }
+
 });
 
 export default function App({ Component, pageProps }: AppProps) {
