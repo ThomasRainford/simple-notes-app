@@ -43,7 +43,7 @@ export class UserResolver {
          return errors
       }
 
-      const hasUser = await repo.findOne({ email, username })
+      const hasUser = await repo.findOne({ $and: [email, username] })
 
       if (hasUser) {
          return {
@@ -79,7 +79,7 @@ export class UserResolver {
       }
    }
 
-   @Query(() => UserResponse)
+   @Mutation(() => UserResponse)
    async login(
       @Arg('usernameOrEmail') usernameOrEmail: string,
       @Arg('password') password: string,
@@ -89,12 +89,14 @@ export class UserResolver {
       const repo = em.getRepository(User)
 
       const isEmail = usernameOrEmail.includes('@')
+      console.log('isEmail: ', isEmail)
       const user = await repo.findOne(isEmail
          ? {
             email: usernameOrEmail
          } : {
             username: usernameOrEmail
          })
+      console.log('User:', user?.password)
 
       // Validate usernameOrEmail.
       if (!user) {

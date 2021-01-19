@@ -1,8 +1,9 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
-import { FormState, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import AccountLayout from '../../components/account/AccountLayout'
+import { LoginMutationVariables, useLoginMutation } from '../../generated/graphql'
 
 interface Props {
 
@@ -26,10 +27,17 @@ const link = (): JSX.Element => (
 
 const Login = ({ }) => {
 
-   const { handleSubmit, errors, register, formState } = useForm();
+   const { handleSubmit, errors, register, formState } = useForm()
 
-   const onSubmit = (input) => {
-      console.log(input)
+   const [result, executeLogin] = useLoginMutation()
+
+   const onSubmit = async (loginInput: LoginMutationVariables) => {
+
+      console.log(result)
+
+      const response = await executeLogin(loginInput)
+
+      console.log(response)
    }
 
    return (
