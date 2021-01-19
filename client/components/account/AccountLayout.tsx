@@ -1,14 +1,12 @@
-import { Button, Center, Divider, Flex, Text, Link } from '@chakra-ui/react'
+import { Center, Divider, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
-import NextLink from 'next/link'
 
 interface Props {
    heading: string
    link: JSX.Element
-   submitButton: JSX.Element
 }
 
-const AccountLayout = ({ children, heading, link, submitButton }) => {
+const AccountLayout = ({ children, heading, link }) => {
    return (
       <Flex direction="column" justify="center" align="center" h="100vh" w="100vw" backgroundColor="#488BFF">
          <Flex direction="column" p="3%" backgroundColor="#fffeee" boxShadow="dark-lg">
@@ -17,7 +15,6 @@ const AccountLayout = ({ children, heading, link, submitButton }) => {
                <Divider orientation="horizontal" />
             </Center>
             {children}
-            {submitButton}
          </Flex>
          {link}
       </Flex>
