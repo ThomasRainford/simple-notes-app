@@ -38,7 +38,7 @@ const Login = ({ }) => {
       const response = await executeLogin(loginInput)
       console.log(response)
       if (response.data?.login.user) {
-         router.push('/')
+         router.push('/notes/my-notes')
          console.log('Success')
       }
    }

@@ -41,10 +41,10 @@ const Register = ({ }) => {
       console.log(result)
 
       const response = await executeRegister({ registerInput })
-
-      console.log(response.data?.register.user?.username)
-
-      router.push('/')
+      if (response.data?.register.user) {
+         router.push('/notes/my-notes')
+         console.log('Success')
+      }
    }
 
    return (
