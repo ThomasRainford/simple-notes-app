@@ -12,16 +12,12 @@ import { isAuth } from "../middleware/isAuth"
 export class UserResolver {
 
    @Query(() => User, { nullable: true })
-   @UseMiddleware(isAuth)
+   //@UseMiddleware(isAuth)
    async me(
       @Ctx() { em, req }: OrmContext
    ): Promise<User | null> {
 
-      // First check if the user is logged in
-      // before attempting to query them.
-      if (!req.session.userId) {
-         return null
-      }
+      console.log('me: ', req.session.userId)
 
       const repo = em.getRepository(User)
 
@@ -125,6 +121,8 @@ export class UserResolver {
 
       // log the user in
       req.session.userId = user._id
+
+      //console.log(req.session.userId)
 
       return {
          user

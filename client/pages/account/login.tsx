@@ -4,7 +4,8 @@ import NextLink from 'next/link'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import AccountLayout from '../../components/account/AccountLayout'
-import { LoginMutationVariables, useLoginMutation } from '../../generated/graphql'
+import { LoginMutationVariables, useLoginMutation, useMeQuery } from '../../generated/graphql'
+import { useIsAuth } from '../../utils/useIsAuth'
 
 interface Props {
 
@@ -31,17 +32,19 @@ const Login = ({ }) => {
    const { handleSubmit, errors, register, formState } = useForm()
    const router = useRouter()
    const [result, executeLogin] = useLoginMutation()
+   const [{ data, error }] = useMeQuery()
 
+   // console.log('Me Query: ', data, error?.message)
 
    const onSubmit = async (loginInput: LoginMutationVariables) => {
 
-      console.log(result)
-
       const response = await executeLogin(loginInput)
+      console.log(response)
+      if (response.data?.login.user) {
+         router.push('/')
+         console.log('Success')
+      }
 
-      console.log(response.data?.login.user?.username)
-
-      router.push('/')
    }
 
    return (
@@ -50,7 +53,7 @@ const Login = ({ }) => {
          link={link()}
       >
          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={errors.usernameOrEmail}>
+            <FormControl>
                <FormLabel>Username or Email</FormLabel>
                <Input
                   name="usernameOrEmail"
@@ -62,7 +65,7 @@ const Login = ({ }) => {
                </FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={errors.password}>
+            <FormControl>
                <FormLabel>Password</FormLabel>
                <Input
                   name="password"
