@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import { useIsAuth } from '../utils/useIsAuth'
 
 export default function Home() {
 
-
+  useIsAuth()
 
   return (
     <div className={styles.container}>
