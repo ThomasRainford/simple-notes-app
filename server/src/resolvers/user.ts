@@ -17,8 +17,6 @@ export class UserResolver {
       @Ctx() { em, req }: OrmContext
    ): Promise<User | null> {
 
-      console.log('me: ', req.session.userId)
-
       const repo = em.getRepository(User)
 
       const user = await repo.findOne({ _id: req.session.userId }, ['lists'])

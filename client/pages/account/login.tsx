@@ -32,9 +32,6 @@ const Login = ({ }) => {
    const { handleSubmit, errors, register, formState } = useForm()
    const router = useRouter()
    const [result, executeLogin] = useLoginMutation()
-   const [{ data, error }] = useMeQuery()
-
-   // console.log('Me Query: ', data, error?.message)
 
    const onSubmit = async (loginInput: LoginMutationVariables) => {
 
@@ -44,7 +41,6 @@ const Login = ({ }) => {
          router.push('/')
          console.log('Success')
       }
-
    }
 
    return (

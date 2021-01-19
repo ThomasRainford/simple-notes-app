@@ -5,11 +5,7 @@ import { useIsAuth } from '../utils/useIsAuth'
 
 export default function Home() {
 
-  // const loggedIn = useIsAuth()
-  // console.log(loggedIn)
-
-  const [{ data }] = useMeQuery()
-  console.log('me Query: ', data)
+  useIsAuth()
 
   return (
     true ?

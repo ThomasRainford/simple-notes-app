@@ -1,17 +1,20 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 import { useMeQuery } from "../generated/graphql"
 
-export const useIsAuth = (): boolean => {
+export const useIsAuth = () => {
 
-   const [{ data, fetching, error }] = useMeQuery()
+   const [{ data, fetching }] = useMeQuery()
    const router = useRouter()
 
-   console.log(error?.message, data)
+   useEffect(() => {
+      // Check if logged in when page loads
+      if (!fetching && !data?.me) {
+         console.log('No User')
+         router.replace('/account/login')
 
-   if (!data?.me) {
-      return false
-   }
-
-   return true
-
+      } else {
+         console.log('User: ', data)
+      }
+   }, [fetching, data, router])
 }

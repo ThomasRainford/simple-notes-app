@@ -8,7 +8,6 @@ const client = createClient({
   fetchOptions: {
     credentials: 'include'
   }
-
 });
 
 export default function App({ Component, pageProps }: AppProps) {
