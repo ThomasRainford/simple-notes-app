@@ -1,4 +1,5 @@
 import React from 'react'
+import NotesLayout from '../../components/notes/NotesLayout'
 
 interface Props {
 
@@ -6,12 +7,10 @@ interface Props {
 
 const MyNotes = ({ }) => {
 
-
-
    return (
-      <div>
+      <NotesLayout>
          Notes Page
-      </div>
+      </NotesLayout>
    )
 }
 

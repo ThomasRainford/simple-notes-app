@@ -1,14 +1,19 @@
+import { Flex } from '@chakra-ui/react'
 import React from 'react'
+import NavBar from '../NavBar'
 
 interface Props {
 
 }
 
-const NotesLayout = ({ }) => {
+const NotesLayout = ({ children }) => {
    return (
-      <div>
-
-      </div>
+      <Flex
+         direction="column"
+      >
+         <NavBar />
+         {children}
+      </Flex>
    )
 }
 
