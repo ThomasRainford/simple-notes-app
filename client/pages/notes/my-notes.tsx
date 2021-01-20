@@ -1,6 +1,9 @@
-import { Button, CloseButton, Flex } from '@chakra-ui/react'
+import { ArrowRightIcon } from '@chakra-ui/icons'
+import { Button, CloseButton, Flex, IconButton } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import NoteEditorContainer from '../../components/notes/NoteEditorContainer'
 import NotesLayout from '../../components/notes/NotesLayout'
+import NotesListsContainer from '../../components/notes/NotesListsContainer'
 
 interface Props {
 
@@ -15,30 +18,26 @@ const MyNotes = ({ }) => {
          <Flex h="100vh">
             {showLists
                ?
-               <Flex p="1%" border="1px">
-                  <CloseButton size="md"
-                     onClick={() => {
-                        setShowLists(false)
-                     }}
-                  />
+               <NotesListsContainer setShowLists={setShowLists}>
                   Lists
-               </Flex>
+               </NotesListsContainer>
                :
                <Flex
                   p="1%"
                   border="1px"
-                  width="15%"
                >
-                  <Button
+                  <IconButton
+                     aria-label="Open Lists"
+                     icon={<ArrowRightIcon />}
                      onClick={() => {
                         setShowLists(true)
                      }}
-                  >Show Lists</Button>
+                  >Show Lists</IconButton>
                </Flex>
             }
-            <Flex p="1%" border="1px" w="100%">
+            <NoteEditorContainer>
                Editor
-            </Flex>
+            </NoteEditorContainer>
          </Flex>
       </NotesLayout>
    )
