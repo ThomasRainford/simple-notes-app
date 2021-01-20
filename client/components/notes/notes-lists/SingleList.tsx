@@ -10,7 +10,7 @@ interface Props {
 const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
    return (
       <Flex justify="space-between" align="center" w="100%" m="5%" >
-         <Text>{list.id}</Text>
+         <Text>{list.title}</Text>
          <Button size="sm"
             onClick={() => setCurrentList(list)}
          >View</Button>

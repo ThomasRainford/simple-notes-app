@@ -1,6 +1,7 @@
 query GetAllNotesLists {
 	getAllNotesLists {
 		id
+		title
 		user {
 			id
 		}
