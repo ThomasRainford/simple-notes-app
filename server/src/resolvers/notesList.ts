@@ -13,6 +13,41 @@ import { User } from "../entities/User";
 @Resolver(NotesList)
 export class NotesListResolver {
 
+   @Query(() => [NotesList], { nullable: true })
+   @UseMiddleware(isAuth)
+   async getAllNotesLists(
+      @Ctx() { em, req }: OrmContext
+   ): Promise<NotesList[] | null> {
+
+      const repo = em.getRepository(NotesList)
+
+      const allNotesLists = await repo.find({ user: req.session.userId })
+
+      if (!allNotesLists) {
+         return null
+      }
+
+      return allNotesLists
+   }
+
+   @Query(() => [Note], { nullable: true })
+   @UseMiddleware(isAuth)
+   async getAllNotes(
+      @Arg('listId') listId: string,
+      @Ctx() { em, req }: OrmContext
+   ): Promise<Note[] | null> {
+
+      const repo = em.getRepository(NotesList)
+
+      const notesList = await repo.findOne({ id: listId, user: req.session.userId }, ['user'])
+
+      if (!notesList) {
+         return null
+      }
+
+      return notesList.notes
+   }
+
    @Query(() => NotesListResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async getNotesList(

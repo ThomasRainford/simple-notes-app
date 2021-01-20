@@ -2,7 +2,7 @@ import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@
 import { useRouter } from 'next/dist/client/router'
 import NextLink from 'next/link'
 import React from 'react'
-import { FormState, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import AccountLayout from '../../components/account/AccountLayout'
 import { useRegisterMutation, UserRegisterInput } from '../../generated/graphql'
 
@@ -41,10 +41,10 @@ const Register = ({ }) => {
       console.log(result)
 
       const response = await executeRegister({ registerInput })
-
-      console.log(response.data?.register.user?.username)
-
-      router.push('/')
+      if (response.data?.register.user) {
+         router.push('/notes/my-notes')
+         console.log('Success')
+      }
    }
 
    return (

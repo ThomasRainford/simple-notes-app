@@ -18,10 +18,16 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllNotesLists?: Maybe<Array<NotesList>>;
+  getAllNotes?: Maybe<Array<Note>>;
   getNotesList?: Maybe<NotesListResponse>;
   getNote?: Maybe<NoteResponse>;
   me?: Maybe<User>;
-  logout: Scalars['Boolean'];
+};
+
+
+export type QueryGetAllNotesArgs = {
+  listId: Scalars['String'];
 };
 
 
@@ -32,12 +38,6 @@ export type QueryGetNotesListArgs = {
 
 export type QueryGetNoteArgs = {
   noteLocation: NoteLocationInput;
-};
-
-export type NotesListResponse = {
-  __typename?: 'NotesListResponse';
-  notesList?: Maybe<NotesList>;
-  errors?: Maybe<Array<Error>>;
 };
 
 export type NotesList = {
@@ -71,6 +71,12 @@ export type Note = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type NotesListResponse = {
+  __typename?: 'NotesListResponse';
+  notesList?: Maybe<NotesList>;
+  errors?: Maybe<Array<Error>>;
+};
+
 export type Error = {
   __typename?: 'Error';
   property: Scalars['String'];
@@ -97,6 +103,7 @@ export type Mutation = {
   deleteNote: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
+  logout: Scalars['Boolean'];
   updateUser: UserResponse;
 };
 
@@ -175,16 +182,28 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { login: (
-    { __typename?: 'UserResponse' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'username' | 'email'>
-    )>, errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'field' | 'message'>
-    )>> }
-  ) }
+  & {
+    login: (
+      { __typename?: 'UserResponse' }
+      & {
+        user?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'username' | 'email'>
+        )>, errors?: Maybe<Array<(
+          { __typename?: 'FieldError' }
+          & Pick<FieldError, 'field' | 'message'>
+        )>>
+      }
+    )
+  }
+);
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -194,16 +213,20 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { register: (
-    { __typename?: 'UserResponse' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'username' | 'email'>
-    )>, errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'field' | 'message'>
-    )>> }
-  ) }
+  & {
+    register: (
+      { __typename?: 'UserResponse' }
+      & {
+        user?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'username' | 'email'>
+        )>, errors?: Maybe<Array<(
+          { __typename?: 'FieldError' }
+          & Pick<FieldError, 'field' | 'message'>
+        )>>
+      }
+    )
+  }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -211,10 +234,12 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = (
   { __typename?: 'Query' }
-  & { me?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, '_id' | 'email' | 'username'>
-  )> }
+  & {
+    me?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, '_id' | 'email' | 'username'>
+    )>
+  }
 );
 
 
@@ -235,6 +260,15 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+
+export function useLogoutMutation() {
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($registerInput: UserRegisterInput!) {

@@ -1,11 +1,13 @@
+import { Link } from '@chakra-ui/react'
+import NextLink from 'next/link'
 import Head from 'next/head'
-import { useMeQuery } from '../generated/graphql'
+import React from 'react'
 import styles from '../styles/Home.module.css'
 import { useIsAuth } from '../utils/useIsAuth'
 
 export default function Home() {
 
-  useIsAuth()
+  //useIsAuth()
 
   return (
     true ?
@@ -18,6 +20,9 @@ export default function Home() {
         </Head>
 
         <main className={styles.main}>
+          <NextLink href="/account/login">
+            <Link>Login</Link>
+          </NextLink>
           <h1 className={styles.title}>
             Welcome to <a href="https://nextjs.org">Next.js!</a>
           </h1>
