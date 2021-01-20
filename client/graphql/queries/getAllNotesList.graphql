@@ -1,0 +1,8 @@
+query GetAllNotesLists {
+	getAllNotesLists {
+		id
+		user {
+			id
+		}
+	}
+}

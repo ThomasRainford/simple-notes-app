@@ -182,20 +182,16 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & {
-    login: (
-      { __typename?: 'UserResponse' }
-      & {
-        user?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'username' | 'email'>
-        )>, errors?: Maybe<Array<(
-          { __typename?: 'FieldError' }
-          & Pick<FieldError, 'field' | 'message'>
-        )>>
-      }
-    )
-  }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'email'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>> }
+  ) }
 );
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
@@ -213,20 +209,31 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & {
-    register: (
-      { __typename?: 'UserResponse' }
-      & {
-        user?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'username' | 'email'>
-        )>, errors?: Maybe<Array<(
-          { __typename?: 'FieldError' }
-          & Pick<FieldError, 'field' | 'message'>
-        )>>
-      }
-    )
-  }
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'email'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>> }
+  ) }
+);
+
+export type GetAllNotesListsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllNotesListsQuery = (
+  { __typename?: 'Query' }
+  & { getAllNotesLists?: Maybe<Array<(
+    { __typename?: 'NotesList' }
+    & Pick<NotesList, 'id'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    ) }
+  )>> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -234,12 +241,10 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = (
   { __typename?: 'Query' }
-  & {
-    me?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, '_id' | 'email' | 'username'>
-    )>
-  }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'email' | 'username'>
+  )> }
 );
 
 
@@ -287,6 +292,20 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const GetAllNotesListsDocument = gql`
+    query GetAllNotesLists {
+  getAllNotesLists {
+    id
+    user {
+      id
+    }
+  }
+}
+    `;
+
+export function useGetAllNotesListsQuery(options: Omit<Urql.UseQueryArgs<GetAllNotesListsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetAllNotesListsQuery>({ query: GetAllNotesListsDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
