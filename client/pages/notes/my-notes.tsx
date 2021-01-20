@@ -1,9 +1,9 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
 import { Flex, IconButton } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import ListViewerContainer from '../../components/notes/ListViewerContainer'
+import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
 import NotesLayout from '../../components/notes/NotesLayout'
-import NotesListsContainer from '../../components/notes/NotesListsContainer'
+import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
 
 interface Props {
 
