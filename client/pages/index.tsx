@@ -4,8 +4,10 @@ import Head from 'next/head'
 import React from 'react'
 import styles from '../styles/Home.module.css'
 import { useIsAuth } from '../utils/useIsAuth'
+import { withUrqlClient } from 'next-urql'
+import { createUrqlClient } from '../utils/createUrqlClient'
 
-export default function Home() {
+function Home() {
 
   //useIsAuth()
 
@@ -76,3 +78,5 @@ export default function Home() {
       </div> : <div>Loading...</div>
   )
 }
+
+export default withUrqlClient(createUrqlClient)(Home)

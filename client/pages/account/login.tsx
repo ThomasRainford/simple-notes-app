@@ -1,10 +1,12 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
+import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/dist/client/router'
 import NextLink from 'next/link'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import AccountLayout from '../../components/account/AccountLayout'
 import { LoginMutationVariables, useLoginMutation } from '../../generated/graphql'
+import { createUrqlClient } from '../../utils/createUrqlClient'
 
 interface Props {
 
@@ -85,4 +87,4 @@ const Login = ({ }) => {
    )
 }
 
-export default Login
+export default withUrqlClient(createUrqlClient)(Login)

@@ -9,6 +9,8 @@ import { useMeQuery } from '../../generated/graphql'
 import { useRouter } from 'next/router'
 import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
 import SingleList from '../../components/notes/notes-lists/SingleList'
+import { withUrqlClient } from 'next-urql'
+import { createUrqlClient } from '../../utils/createUrqlClient'
 
 interface Note {
    title: string
@@ -86,4 +88,4 @@ const MyNotes = ({ }) => {
    )
 }
 
-export default MyNotes
+export default withUrqlClient(createUrqlClient, { ssr: true })(MyNotes)
