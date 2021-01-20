@@ -7,7 +7,7 @@ interface Props {
 
 const SingleListContainer = ({ children }) => {
    return (
-      <Flex mb="5%" bg="#CACACA">
+      <Flex mb="5%" bg="#DADADA">
          {children}
       </Flex>
    )

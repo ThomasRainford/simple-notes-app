@@ -71,11 +71,11 @@ const MyNotes = ({ }) => {
                      <Heading size="md">Select a Note</Heading>
                   </Box>
                   :
-                  <Flex direction="column">
+                  <Flex direction="column" width="100%">
                      {currentList.notes.length > 0
                         ?
                         currentList.notes.map(({ id, title, text }: Note) => (
-                           <Flex key={id}>
+                           <Flex key={id} direction="column" m="1%" bg="#EAEAEA">
                               <Heading size="md">{title}</Heading>
                               <Text>{text}</Text>
                            </Flex>
