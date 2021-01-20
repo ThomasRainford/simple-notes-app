@@ -14,7 +14,7 @@ const NotesListsContainer: React.FC<Props> = ({ children, setShowLists }) => {
                setShowLists(false)
             }}
          />
-         <Flex direction="column">
+         <Flex direction="column" mt="5%">
             {children}
          </Flex>
       </Flex>

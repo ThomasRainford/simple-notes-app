@@ -5,7 +5,7 @@ import ListViewerContainer from '../../components/notes/list-viewer/ListViewerCo
 import NotesLayout from '../../components/notes/NotesLayout'
 import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
 import { useIsAuth } from '../../utils/useIsAuth'
-import { NotesList, useGetAllNotesListsQuery, useMeQuery } from '../../generated/graphql'
+import { Note, NotesList, useGetAllNotesListsQuery, useMeQuery } from '../../generated/graphql'
 import { useRouter } from 'next/router'
 import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
 import SingleList from '../../components/notes/notes-lists/SingleList'
@@ -23,11 +23,6 @@ query {
    }
  }
 `
-
-interface Note {
-   title: string
-   text: string
-}
 
 interface Props {
 
@@ -70,17 +65,26 @@ const MyNotes = ({ }) => {
                </Flex>
             }
             <ListViewerContainer>
-               {/* {!currentList
+               {!currentList
                   ?
                   <Box>
-                     <Text>Select a Note</Text>
+                     <Heading size="md">Select a Note</Heading>
                   </Box>
                   :
-                  <Box>
-                     <Heading>{currentNote?.title}</Heading>
-                     <Text>{currentNote?.text}</Text>
-                  </Box>
-               } */}
+                  <Flex direction="column">
+                     {currentList.notes.length > 0
+                        ?
+                        currentList.notes.map(({ id, title, text }: Note) => (
+                           <Flex key={id}>
+                              <Heading size="md">{title}</Heading>
+                              <Text>{text}</Text>
+                           </Flex>
+                        ))
+                        :
+                        <Heading size="md">No Notes to display :(</Heading>
+                     }
+                  </Flex>
+               }
             </ListViewerContainer>
          </Flex>
       </NotesLayout>

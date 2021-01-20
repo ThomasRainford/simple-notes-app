@@ -242,7 +242,10 @@ export type GetAllNotesListsQuery = (
   & { getAllNotesLists?: Maybe<Array<(
     { __typename?: 'NotesList' }
     & Pick<NotesList, 'id' | 'title'>
-    & { user: (
+    & { notes: Array<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id' | 'title' | 'text'>
+    )>, user: (
       { __typename?: 'User' }
       & Pick<User, 'id'>
     ) }
@@ -311,6 +314,11 @@ export const GetAllNotesListsDocument = gql`
   getAllNotesLists {
     id
     title
+    notes {
+      id
+      title
+      text
+    }
     user {
       id
     }

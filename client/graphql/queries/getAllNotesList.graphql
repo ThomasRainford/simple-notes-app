@@ -2,6 +2,11 @@ query GetAllNotesLists {
 	getAllNotesLists {
 		id
 		title
+		notes {
+			id
+			title
+			text
+		}
 		user {
 			id
 		}
