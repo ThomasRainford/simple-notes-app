@@ -4,8 +4,7 @@ import NextLink from 'next/link'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import AccountLayout from '../../components/account/AccountLayout'
-import { LoginMutationVariables, useLoginMutation, useMeQuery } from '../../generated/graphql'
-import { useIsAuth } from '../../utils/useIsAuth'
+import { LoginMutationVariables, useLoginMutation } from '../../generated/graphql'
 
 interface Props {
 

@@ -2,7 +2,7 @@ import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@
 import { useRouter } from 'next/dist/client/router'
 import NextLink from 'next/link'
 import React from 'react'
-import { FormState, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import AccountLayout from '../../components/account/AccountLayout'
 import { useRegisterMutation, UserRegisterInput } from '../../generated/graphql'
 

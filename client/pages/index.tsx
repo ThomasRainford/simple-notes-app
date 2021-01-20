@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import { useMeQuery } from '../generated/graphql'
 import styles from '../styles/Home.module.css'
 import { useIsAuth } from '../utils/useIsAuth'
 

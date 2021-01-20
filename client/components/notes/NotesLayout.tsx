@@ -8,9 +8,7 @@ interface Props {
 
 const NotesLayout = ({ children }) => {
    return (
-      <Flex
-         direction="column"
-      >
+      <Flex direction="column">
          <NavBar />
          {children}
       </Flex>
