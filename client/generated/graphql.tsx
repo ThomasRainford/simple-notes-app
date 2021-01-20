@@ -44,6 +44,7 @@ export type NotesList = {
   __typename?: 'NotesList';
   _id: Scalars['ID'];
   id: Scalars['String'];
+  title: Scalars['String'];
   user: User;
   notes: Array<Note>;
   createdAt: Scalars['DateTime'];
@@ -97,6 +98,7 @@ export type NoteLocationInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createList: NotesList;
+  updateNotesList: NotesListResponse;
   addNote?: Maybe<NotesListResponse>;
   updateNote?: Maybe<NoteResponse>;
   deleteNotesList: Scalars['Boolean'];
@@ -105,6 +107,17 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   updateUser: UserResponse;
+};
+
+
+export type MutationCreateListArgs = {
+  title: Scalars['String'];
+};
+
+
+export type MutationUpdateNotesListArgs = {
+  newTitle: Scalars['String'];
+  listId: Scalars['String'];
 };
 
 
