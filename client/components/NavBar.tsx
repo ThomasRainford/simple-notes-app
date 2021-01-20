@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useLogoutMutation } from '../generated/graphql'
 
@@ -8,6 +9,7 @@ interface Props {
 
 const NavBar = ({ }) => {
 
+   const router = useRouter()
    const [result, executeLogout] = useLogoutMutation()
 
    return (
@@ -28,12 +30,12 @@ const NavBar = ({ }) => {
                   onClick={() => {
                      console.log('logout!')
                      executeLogout()
+                     router.replace('/')
                      console.log(result)
                   }}
                >Logout</Link>
             </Box>
          </Flex>
-
       </Flex>
    )
 }

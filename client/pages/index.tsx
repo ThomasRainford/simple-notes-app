@@ -4,7 +4,7 @@ import { useIsAuth } from '../utils/useIsAuth'
 
 export default function Home() {
 
-  useIsAuth()
+  //useIsAuth()
 
   return (
     true ?

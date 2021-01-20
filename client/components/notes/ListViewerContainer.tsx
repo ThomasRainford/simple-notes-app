@@ -5,7 +5,7 @@ interface Props {
 
 }
 
-const NoteEditorContainer = ({ children }) => {
+const ListViewerContainer = ({ children }) => {
    return (
       <Flex p="1%" border="1px" w="100%">
          {children}
@@ -13,4 +13,4 @@ const NoteEditorContainer = ({ children }) => {
    )
 }
 
-export default NoteEditorContainer
+export default ListViewerContainer

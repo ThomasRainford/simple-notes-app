@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
 import { Flex, IconButton } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import NoteEditorContainer from '../../components/notes/NoteEditorContainer'
+import ListViewerContainer from '../../components/notes/ListViewerContainer'
 import NotesLayout from '../../components/notes/NotesLayout'
 import NotesListsContainer from '../../components/notes/NotesListsContainer'
 
@@ -34,9 +34,9 @@ const MyNotes = ({ }) => {
                   >Show Lists</IconButton>
                </Flex>
             }
-            <NoteEditorContainer>
-               Editor
-            </NoteEditorContainer>
+            <ListViewerContainer>
+               Current Notes List
+            </ListViewerContainer>
          </Flex>
       </NotesLayout>
    )
