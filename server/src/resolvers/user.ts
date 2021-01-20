@@ -125,7 +125,7 @@ export class UserResolver {
       }
    }
 
-   @Query(() => Boolean)
+   @Mutation(() => Boolean)
    async logout(
       @Ctx() { req, res }: OrmContext
    ): Promise<boolean> {
