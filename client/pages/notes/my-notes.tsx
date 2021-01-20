@@ -101,8 +101,8 @@ export async function getServerSideProps() {
          // urqlState is a keyword here so withUrqlClient can pick it up.
          urqlState: ssrCache.extractData()
       },
-      revalidate: 600
+      //revalidate: 600
    };
 }
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(MyNotes)
+export default withUrqlClient(createUrqlClient, { ssr: false })(MyNotes)
