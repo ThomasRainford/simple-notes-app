@@ -7,17 +7,16 @@ interface Note {
 }
 
 interface Props {
-   title: string
-   text: string
+   note: Note
    setCurrentNote: React.Dispatch<React.SetStateAction<Note>>
 }
 
-const SingleList: React.FC<Props> = ({ title, text, setCurrentNote }) => {
+const SingleList: React.FC<Props> = ({ note, setCurrentNote }) => {
    return (
       <Flex justify="space-between" align="center" w="100%" m="5%" >
-         <Text>{title}</Text>
+         <Text>{note.title}</Text>
          <Button size="sm"
-            onClick={() => setCurrentNote({ title, text })}
+            onClick={() => setCurrentNote({ title: note.title, text: note.text })}
          >View</Button>
       </Flex >
    )

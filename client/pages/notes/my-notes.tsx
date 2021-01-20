@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Flex, Heading, IconButton, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
 import NotesLayout from '../../components/notes/NotesLayout'
@@ -26,6 +26,21 @@ const MyNotes = ({ }) => {
    const [showLists, setShowLists] = useState<boolean>(true)
    const [currentNote, setCurrentNote] = useState<Note>(undefined)
 
+   const allNotes: Note[] = [
+      {
+         title: "Title 1",
+         text: "text 1"
+      },
+      {
+         title: "Title 2",
+         text: "text 2"
+      },
+      {
+         title: "Title 3",
+         text: "text 3"
+      },
+   ]
+
    return (
       <NotesLayout>
          <Flex h="100vh">
@@ -34,17 +49,12 @@ const MyNotes = ({ }) => {
                // Displays all note lists
                <NotesListsContainer setShowLists={setShowLists}>
                   {
-                     // TODO: map over array of lists   
+                     allNotes.map((note) => (
+                        <SingleListContainer key={note.title}>
+                           <SingleList note={note} setCurrentNote={setCurrentNote} />
+                        </SingleListContainer>
+                     ))
                   }
-                  <SingleListContainer>
-                     <SingleList title="Title 1" text="text 1" setCurrentNote={setCurrentNote} />
-                  </SingleListContainer>
-                  <SingleListContainer>
-                     <SingleList title="Title 2" text="text 2" setCurrentNote={setCurrentNote} />
-                  </SingleListContainer>
-                  <SingleListContainer>
-                     <SingleList title="Title 3" text="text 3" setCurrentNote={setCurrentNote} />
-                  </SingleListContainer>
                </NotesListsContainer>
                :
                // displays no note lists
@@ -59,9 +69,17 @@ const MyNotes = ({ }) => {
                </Flex>
             }
             <ListViewerContainer>
-               Current Notes List
-               <Heading>{currentNote?.title}</Heading>
-               <Text>{currentNote?.text}</Text>
+               {!currentNote
+                  ?
+                  <Box>
+                     <Text>Select a Note</Text>
+                  </Box>
+                  :
+                  <Box>
+                     <Heading>{currentNote?.title}</Heading>
+                     <Text>{currentNote?.text}</Text>
+                  </Box>
+               }
             </ListViewerContainer>
          </Flex>
       </NotesLayout>
