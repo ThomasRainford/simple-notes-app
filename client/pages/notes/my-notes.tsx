@@ -5,13 +5,15 @@ import ListViewerContainer from '../../components/notes/list-viewer/ListViewerCo
 import NotesLayout from '../../components/notes/NotesLayout'
 import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
 import { useIsAuth } from '../../utils/useIsAuth'
-import { Note, NotesList, useGetAllNotesListsQuery, useMeQuery } from '../../generated/graphql'
+import { Note as NoteType, NotesList, useGetAllNotesListsQuery, useMeQuery } from '../../generated/graphql'
 import { useRouter } from 'next/router'
 import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
 import SingleList from '../../components/notes/notes-lists/SingleList'
 import { initUrqlClient, withUrqlClient } from 'next-urql'
 import { createUrqlClient } from '../../utils/createUrqlClient'
 import { ssrExchange, dedupExchange, cacheExchange, fetchExchange } from 'urql'
+import NoteContainer from '../../components/notes/list-viewer/NoteContainer'
+import Note from '../../components/notes/list-viewer/Note'
 
 const GET_ALL_NOTES_LIST_Q = `
 query {
@@ -71,19 +73,16 @@ const MyNotes = ({ }) => {
                      <Heading size="md">Select a Note</Heading>
                   </Box>
                   :
-                  <Flex direction="column" width="100%">
+                  <NoteContainer>
                      {currentList.notes.length > 0
                         ?
-                        currentList.notes.map(({ id, title, text }: Note) => (
-                           <Flex key={id} direction="column" m="1%" bg="#EAEAEA">
-                              <Heading size="md">{title}</Heading>
-                              <Text>{text}</Text>
-                           </Flex>
+                        currentList.notes.map((note: NoteType) => (
+                           <Note key={note.id} note={note} />
                         ))
                         :
                         <Heading size="md">No Notes to display :(</Heading>
                      }
-                  </Flex>
+                  </NoteContainer>
                }
             </ListViewerContainer>
          </Flex>
