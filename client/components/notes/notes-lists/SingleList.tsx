@@ -1,16 +1,25 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Button, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
 
-interface Props {
+interface Note {
    title: string
    text: string
 }
 
-const SingleList: React.FC<Props> = ({ title }) => {
+interface Props {
+   title: string
+   text: string
+   setCurrentNote: React.Dispatch<React.SetStateAction<Note>>
+}
+
+const SingleList: React.FC<Props> = ({ title, text, setCurrentNote }) => {
    return (
-      <Flex>
+      <Flex justify="space-between" align="center" w="100%" m="5%" >
          <Text>{title}</Text>
-      </Flex>
+         <Button size="sm"
+            onClick={() => setCurrentNote({ title, text })}
+         >View</Button>
+      </Flex >
    )
 }
 

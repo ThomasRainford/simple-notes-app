@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Flex, IconButton } from '@chakra-ui/react'
+import { Flex, Heading, IconButton, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
 import NotesLayout from '../../components/notes/NotesLayout'
@@ -10,6 +10,11 @@ import { useRouter } from 'next/router'
 import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
 import SingleList from '../../components/notes/notes-lists/SingleList'
 
+interface Note {
+   title: string
+   text: string
+}
+
 interface Props {
 
 }
@@ -19,6 +24,7 @@ const MyNotes = ({ }) => {
    //useIsAuth()
 
    const [showLists, setShowLists] = useState<boolean>(true)
+   const [currentNote, setCurrentNote] = useState<Note>(undefined)
 
    return (
       <NotesLayout>
@@ -31,13 +37,13 @@ const MyNotes = ({ }) => {
                      // TODO: map over array of lists   
                   }
                   <SingleListContainer>
-                     <SingleList title="Title 1" text="text 1" />
+                     <SingleList title="Title 1" text="text 1" setCurrentNote={setCurrentNote} />
                   </SingleListContainer>
                   <SingleListContainer>
-                     <SingleList title="Title 2" text="text 2" />
+                     <SingleList title="Title 2" text="text 2" setCurrentNote={setCurrentNote} />
                   </SingleListContainer>
                   <SingleListContainer>
-                     <SingleList title="Title 3" text="text 3" />
+                     <SingleList title="Title 3" text="text 3" setCurrentNote={setCurrentNote} />
                   </SingleListContainer>
                </NotesListsContainer>
                :
@@ -54,6 +60,8 @@ const MyNotes = ({ }) => {
             }
             <ListViewerContainer>
                Current Notes List
+               <Heading>{currentNote?.title}</Heading>
+               <Text>{currentNote?.text}</Text>
             </ListViewerContainer>
          </Flex>
       </NotesLayout>
