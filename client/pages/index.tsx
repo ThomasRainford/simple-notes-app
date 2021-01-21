@@ -79,4 +79,4 @@ function Home() {
   )
 }
 
-export default withUrqlClient(createUrqlClient)(Home)
+export default withUrqlClient(createUrqlClient, { ssr: false })(Home)
