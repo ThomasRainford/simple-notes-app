@@ -7,6 +7,7 @@ import { cacheExchange, dedupExchange, fetchExchange, ssrExchange } from 'urql'
 import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
 import Note from '../../components/notes/list-viewer/Note'
 import NoteContainer from '../../components/notes/list-viewer/NoteContainer'
+import LoadingIndicator from '../../components/notes/LoadingIndicator'
 import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
 import SingleList from '../../components/notes/notes-lists/SingleList'
 import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
@@ -85,7 +86,7 @@ const MyNotes = ({ }) => {
                }
             </NotesLayout>
             :
-            <Text>Loading..</Text>
+            <LoadingIndicator />
          }
       </>
    )
