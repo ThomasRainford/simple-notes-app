@@ -14,14 +14,13 @@ import NotesLayout from '../../components/notes/NotesLayout'
 import { Note as NoteType, NotesList, useGetAllNotesListsQuery } from '../../generated/graphql'
 import { createUrqlClient } from '../../utils/createUrqlClient'
 import { GET_ALL_NOTES_lISTS_QUERY } from '../../utils/ssr-queries/getAllNotesListQuery'
+import { useIsAuth } from '../../utils/useIsAuth'
 
 interface Props {
 
 }
 
 const MyNotes = ({ }) => {
-
-   //useIsAuth()
 
    const router = useRouter()
 
@@ -30,12 +29,7 @@ const MyNotes = ({ }) => {
 
    const [result] = useGetAllNotesListsQuery()
 
-   useEffect(() => {
-      // Check if user is logged.
-      if (result.error?.message.includes('not authenticated')) {
-         router.replace('/account/login')
-      }
-   }, [result, router])
+   useIsAuth(result)
 
    return (
       <>
@@ -55,8 +49,6 @@ const MyNotes = ({ }) => {
                                  </SingleListContainer>
                               ))
                            }
-                           <Text>TODO: Create a page for creating note lists.</Text>
-                           <Text>TODO: Use editable Chakra components for updating notes.</Text>
                         </NotesListsContainer>
                         :
                         // displays no note lists
