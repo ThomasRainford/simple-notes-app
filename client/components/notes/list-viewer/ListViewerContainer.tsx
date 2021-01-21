@@ -7,7 +7,7 @@ interface Props {
 
 const ListViewerContainer = ({ children }) => {
    return (
-      <Flex p="1%" border="1px" w="100%">
+      <Flex p="1%" borderLeft="1px" w="100%">
          {children}
       </Flex>
    )

@@ -1,21 +1,18 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton } from '@chakra-ui/react'
+import { initUrqlClient, withUrqlClient } from 'next-urql'
 import React, { useState } from 'react'
+import { cacheExchange, dedupExchange, fetchExchange, ssrExchange } from 'urql'
 import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
-import NotesLayout from '../../components/notes/NotesLayout'
+import Note from '../../components/notes/list-viewer/Note'
+import NoteContainer from '../../components/notes/list-viewer/NoteContainer'
 import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
-import { useIsAuth } from '../../utils/useIsAuth'
-import { useMeQuery } from '../../generated/graphql'
-import { useRouter } from 'next/router'
-import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
 import SingleList from '../../components/notes/notes-lists/SingleList'
-import { withUrqlClient } from 'next-urql'
+import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
+import NotesLayout from '../../components/notes/NotesLayout'
+import { Note as NoteType, NotesList, useGetAllNotesListsQuery } from '../../generated/graphql'
 import { createUrqlClient } from '../../utils/createUrqlClient'
-
-interface Note {
-   title: string
-   text: string
-}
+import { GET_ALL_NOTES_lISTS_QUERY } from '../../utils/ssr-queries/getAllNotesListQuery'
 
 interface Props {
 
@@ -26,22 +23,9 @@ const MyNotes = ({ }) => {
    //useIsAuth()
 
    const [showLists, setShowLists] = useState<boolean>(true)
-   const [currentNote, setCurrentNote] = useState<Note>(undefined)
+   const [currentList, setCurrentList] = useState<NotesList>(undefined)
 
-   const allNotes: Note[] = [
-      {
-         title: "Title 1",
-         text: "text 1"
-      },
-      {
-         title: "Title 2",
-         text: "text 2"
-      },
-      {
-         title: "Title 3",
-         text: "text 3"
-      },
-   ]
+   const [result] = useGetAllNotesListsQuery()
 
    return (
       <NotesLayout>
@@ -51,9 +35,9 @@ const MyNotes = ({ }) => {
                // Displays all note lists
                <NotesListsContainer setShowLists={setShowLists}>
                   {
-                     allNotes.map((note) => (
-                        <SingleListContainer key={note.title}>
-                           <SingleList note={note} setCurrentNote={setCurrentNote} />
+                     result.data?.getAllNotesLists.map((list: NotesList) => (
+                        <SingleListContainer key={list.id}>
+                           <SingleList list={list} setCurrentList={setCurrentList} />
                         </SingleListContainer>
                      ))
                   }
@@ -71,16 +55,22 @@ const MyNotes = ({ }) => {
                </Flex>
             }
             <ListViewerContainer>
-               {!currentNote
+               {!currentList
                   ?
                   <Box>
-                     <Text>Select a Note</Text>
+                     <Heading size="md">Select a Note</Heading>
                   </Box>
                   :
-                  <Box>
-                     <Heading>{currentNote?.title}</Heading>
-                     <Text>{currentNote?.text}</Text>
-                  </Box>
+                  <NoteContainer>
+                     {currentList.notes.length > 0
+                        ?
+                        currentList.notes.map((note: NoteType) => (
+                           <Note key={note.id} note={note} />
+                        ))
+                        :
+                        <Heading size="md">No Notes to display :(</Heading>
+                     }
+                  </NoteContainer>
                }
             </ListViewerContainer>
          </Flex>
@@ -88,4 +78,25 @@ const MyNotes = ({ }) => {
    )
 }
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(MyNotes)
+export async function getServerSideProps() {
+   const ssrCache = ssrExchange({ isClient: false });
+
+   const client = initUrqlClient({
+      url: "http://localhost:3000/graphql",
+      exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
+   }, true);
+
+   // This query is used to populate the cache for the query
+   // used on this page.
+   await client.query(GET_ALL_NOTES_lISTS_QUERY).toPromise();
+
+   return {
+      props: {
+         // urqlState is a keyword here so withUrqlClient can pick it up.
+         urqlState: ssrCache.extractData()
+      },
+      //revalidate: 600
+   };
+}
+
+export default withUrqlClient(createUrqlClient, { ssr: false })(MyNotes)

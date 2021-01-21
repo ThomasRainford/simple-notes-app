@@ -1,22 +1,18 @@
 import { Button, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
-
-interface Note {
-   title: string
-   text: string
-}
+import { NotesList } from '../../../generated/graphql'
 
 interface Props {
-   note: Note
-   setCurrentNote: React.Dispatch<React.SetStateAction<Note>>
+   list: NotesList
+   setCurrentList: React.Dispatch<React.SetStateAction<NotesList>>
 }
 
-const SingleList: React.FC<Props> = ({ note, setCurrentNote }) => {
+const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
    return (
       <Flex justify="space-between" align="center" w="100%" m="5%" >
-         <Text>{note.title}</Text>
+         <Text>{list.title}</Text>
          <Button size="sm"
-            onClick={() => setCurrentNote({ title: note.title, text: note.text })}
+            onClick={() => setCurrentList(list)}
          >View</Button>
       </Flex >
    )

@@ -2,15 +2,14 @@ import { Flex } from '@chakra-ui/react'
 import React from 'react'
 
 interface Props {
-
 }
 
-const SingleListContainer = ({ children }) => {
+const NoteContainer = ({ children }) => {
    return (
-      <Flex mb="5%" bg="#DADADA">
+      <Flex direction="column" width="100%">
          {children}
       </Flex>
    )
 }
 
-export default SingleListContainer
+export default NoteContainer

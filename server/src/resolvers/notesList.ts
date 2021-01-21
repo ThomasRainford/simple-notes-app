@@ -113,10 +113,11 @@ export class NotesListResolver {
    @Mutation(() => NotesList)
    @UseMiddleware(isAuth)
    async createList(
+      @Arg('title') title: string,
       @Ctx() { em, req }: OrmContext,
    ): Promise<NotesList> {
 
-      const notesList = new NotesList([])
+      const notesList = new NotesList([], title)
 
       const user = await em.getRepository(User).findOne({ id: req.session['userId']?.toString() })
 
@@ -128,6 +129,36 @@ export class NotesListResolver {
       await em.persistAndFlush(notesList)
 
       return notesList
+   }
+
+   @Mutation(() => NotesListResponse)
+   @UseMiddleware(isAuth)
+   async updateNotesList(
+      @Arg('listId') listId: string,
+      @Arg('newTitle') newTitle: string,
+      @Ctx() { em, req }: OrmContext
+   ): Promise<NotesListResponse> {
+
+      const repo = em.getRepository(NotesList)
+
+      const notesList = await repo.findOne({ id: listId, user: req.session.userId }, ['user'])
+
+      if (!notesList) {
+         return {
+            errors: [
+               {
+                  property: 'list',
+                  message: 'List does not exist.'
+               }
+            ]
+         }
+      }
+
+      notesList.title = newTitle
+
+      em.persistAndFlush(notesList)
+
+      return { notesList }
    }
 
    @Mutation(() => NotesListResponse, { nullable: true })
