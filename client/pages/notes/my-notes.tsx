@@ -1,30 +1,18 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
-import NotesLayout from '../../components/notes/NotesLayout'
-import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
-import { useIsAuth } from '../../utils/useIsAuth'
-import { Note as NoteType, NotesList, useGetAllNotesListsQuery, useMeQuery } from '../../generated/graphql'
-import { useRouter } from 'next/router'
-import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
-import SingleList from '../../components/notes/notes-lists/SingleList'
+import { Box, Flex, Heading, IconButton } from '@chakra-ui/react'
 import { initUrqlClient, withUrqlClient } from 'next-urql'
-import { createUrqlClient } from '../../utils/createUrqlClient'
-import { ssrExchange, dedupExchange, cacheExchange, fetchExchange } from 'urql'
-import NoteContainer from '../../components/notes/list-viewer/NoteContainer'
+import React, { useState } from 'react'
+import { cacheExchange, dedupExchange, fetchExchange, ssrExchange } from 'urql'
+import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
 import Note from '../../components/notes/list-viewer/Note'
-
-const GET_ALL_NOTES_LIST_Q = `
-query {
-   getAllNotesLists {
-     id
-     user {
-          id
-     }
-   }
- }
-`
+import NoteContainer from '../../components/notes/list-viewer/NoteContainer'
+import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
+import SingleList from '../../components/notes/notes-lists/SingleList'
+import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
+import NotesLayout from '../../components/notes/NotesLayout'
+import { Note as NoteType, NotesList, useGetAllNotesListsQuery } from '../../generated/graphql'
+import { createUrqlClient } from '../../utils/createUrqlClient'
+import { GET_ALL_NOTES_lISTS_QUERY } from '../../utils/ssr-queries/getAllNotesListQuery'
 
 interface Props {
 
@@ -92,13 +80,16 @@ const MyNotes = ({ }) => {
 
 export async function getServerSideProps() {
    const ssrCache = ssrExchange({ isClient: false });
+
    const client = initUrqlClient({
       url: "http://localhost:3000/graphql",
       exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
    }, true);
+
    // This query is used to populate the cache for the query
    // used on this page.
-   await client.query(GET_ALL_NOTES_LIST_Q).toPromise();
+   await client.query(GET_ALL_NOTES_lISTS_QUERY).toPromise();
+
    return {
       props: {
          // urqlState is a keyword here so withUrqlClient can pick it up.

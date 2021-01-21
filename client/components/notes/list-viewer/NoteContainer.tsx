@@ -1,6 +1,5 @@
-import { Flex, Heading, Text } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import React from 'react'
-import { Note, NotesList } from '../../../generated/graphql'
 
 interface Props {
 }
