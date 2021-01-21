@@ -1,8 +1,8 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Link } from '@chakra-ui/react'
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, CloseButton, FormControl, FormErrorMessage, FormLabel, Input, Link, Text } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/dist/client/router'
 import NextLink from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import AccountLayout from '../../components/account/AccountLayout'
 import { LoginMutationVariables, useLoginMutation } from '../../generated/graphql'
@@ -30,8 +30,9 @@ const link = (): JSX.Element => (
 
 const Login = ({ }) => {
 
-   const { handleSubmit, errors, register, formState } = useForm()
    const router = useRouter()
+   const [invalidLogin, setInvalidLogin] = useState<JSX.Element>(null)
+   const { handleSubmit, errors, register, formState } = useForm()
    const [result, executeLogin] = useLoginMutation()
 
    const onSubmit = async (loginInput: LoginMutationVariables) => {
@@ -42,6 +43,17 @@ const Login = ({ }) => {
          router.push('/notes/my-notes')
          console.log('Success')
       }
+
+      if (response.data?.login.errors?.length > 0) {
+         console.log('Invalid login')
+         setInvalidLogin(
+            <Alert status="error">
+               <AlertIcon />
+               <AlertDescription>Incorrect Login</AlertDescription>
+               <CloseButton position="absolute" right="8px" top="8px" />
+            </Alert>
+         )
+      }
    }
 
    return (
@@ -49,6 +61,7 @@ const Login = ({ }) => {
          heading="Login"
          link={link()}
       >
+         {invalidLogin}
          <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl>
                <FormLabel>Username or Email</FormLabel>
@@ -82,6 +95,7 @@ const Login = ({ }) => {
             >
                Login
             </Button>
+
          </form>
       </AccountLayout>
    )
