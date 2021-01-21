@@ -6,7 +6,7 @@ interface Props {
    note: NoteType
 }
 
-const Note = ({ note }) => {
+const Note: React.FC<Props> = ({ note }) => {
 
    const { title, text } = note
 
