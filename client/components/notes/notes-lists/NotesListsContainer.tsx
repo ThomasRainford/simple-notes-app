@@ -8,7 +8,7 @@ interface Props {
 const NotesListsContainer: React.FC<Props> = ({ children, setShowLists }) => {
 
    return (
-      <Flex direction="column" p="1%" borderRight="1px" w="25%">
+      <Flex direction="column" p="1%" borderRight="1px" borderColor="#CACACA" w="35%">
          <CloseButton size="md"
             onClick={() => {
                setShowLists(false)

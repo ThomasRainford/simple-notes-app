@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Box, Flex, Heading, IconButton } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton, Stack } from '@chakra-ui/react'
 import { initUrqlClient, withUrqlClient } from 'next-urql'
 import React, { useState } from 'react'
 import { cacheExchange, dedupExchange, fetchExchange, ssrExchange } from 'urql'

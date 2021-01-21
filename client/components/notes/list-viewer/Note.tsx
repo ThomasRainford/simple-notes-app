@@ -11,7 +11,7 @@ const Note: React.FC<Props> = ({ note }) => {
    const { title, text } = note
 
    return (
-      <Flex direction="column" m="1%" bg="#EAEAEA">
+      <Flex direction="column" p="1.5%" shadow="md" bg="#EAEAEA">
          <Heading size="md">{title}</Heading>
          <Text>{text}</Text>
       </Flex>
