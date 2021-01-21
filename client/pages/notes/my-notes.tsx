@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Box, Flex, Heading, IconButton, Stack } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
 import { initUrqlClient, withUrqlClient } from 'next-urql'
 import React, { useState } from 'react'
 import { cacheExchange, dedupExchange, fetchExchange, ssrExchange } from 'urql'
@@ -41,10 +41,12 @@ const MyNotes = ({ }) => {
                         </SingleListContainer>
                      ))
                   }
+                  <Text>TODO: Create a page for creating note lists.</Text>
+                  <Text>TODO: Use editable Chakra components for updating notes.</Text>
                </NotesListsContainer>
                :
                // displays no note lists
-               <Flex p="1%" border="1px">
+               <Flex p="1%" borderRight="1px" borderColor="#CACACA">
                   <IconButton
                      aria-label="Open Lists"
                      icon={<ArrowRightIcon />}
