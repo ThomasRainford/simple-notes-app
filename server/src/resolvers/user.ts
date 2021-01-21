@@ -125,11 +125,15 @@ export class UserResolver {
       }
    }
 
-   @Mutation(() => Boolean)
+   @Mutation(() => User)
    async logout(
-      @Ctx() { req, res }: OrmContext
-   ): Promise<boolean> {
-      return new Promise((resolve) => {
+      @Ctx() { em, req, res }: OrmContext
+   ): Promise<User | null> {
+
+      const repo = em.getRepository(User)
+      const user = await repo.findOne({ _id: req.session.userId })
+
+      const logoutPromise: Promise<boolean> = new Promise((resolve) => {
          req.session.destroy((error) => {
             res.clearCookie(COOKIE_NAME)
             if (error) {
@@ -140,6 +144,16 @@ export class UserResolver {
             resolve(true)
          })
       })
+
+      const result = await logoutPromise
+
+      console.log(result)
+
+      if (!result) {
+         return null
+      }
+
+      return user
    }
 
    @Mutation(() => UserResponse)

@@ -105,7 +105,7 @@ export type Mutation = {
   deleteNote: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
-  logout: Scalars['Boolean'];
+  logout: User;
   updateUser: UserResponse;
 };
 
@@ -212,7 +212,10 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'logout'>
+  & { logout: (
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  ) }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -284,7 +287,9 @@ export function useLoginMutation() {
 };
 export const LogoutDocument = gql`
     mutation Logout {
-  logout
+  logout {
+    id
+  }
 }
     `;
 
