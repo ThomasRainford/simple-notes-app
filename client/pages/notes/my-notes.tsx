@@ -29,53 +29,55 @@ const MyNotes = ({ }) => {
 
    return (
       <NotesLayout>
-         <Flex h="100vh">
-            {showLists
-               ?
-               // Displays all note lists
-               <NotesListsContainer setShowLists={setShowLists}>
-                  {
-                     result.data?.getAllNotesLists.map((list: NotesList) => (
-                        <SingleListContainer key={list.id}>
-                           <SingleList list={list} setCurrentList={setCurrentList} />
-                        </SingleListContainer>
-                     ))
-                  }
-                  <Text>TODO: Create a page for creating note lists.</Text>
-                  <Text>TODO: Use editable Chakra components for updating notes.</Text>
-               </NotesListsContainer>
-               :
-               // displays no note lists
-               <Flex p="1%" borderRight="1px" borderColor="#CACACA">
-                  <IconButton
-                     aria-label="Open Lists"
-                     icon={<ArrowRightIcon />}
-                     onClick={() => {
-                        setShowLists(true)
-                     }}
-                  >Show Lists</IconButton>
-               </Flex>
-            }
-            <ListViewerContainer>
-               {!currentList
+         { result.data?.getAllNotesLists &&
+            <Flex h="100vh">
+               {showLists
                   ?
-                  <Box>
-                     <Heading size="md">Select a Note</Heading>
-                  </Box>
-                  :
-                  <NoteContainer>
-                     {currentList.notes.length > 0
-                        ?
-                        currentList.notes.map((note: NoteType) => (
-                           <Note key={note.id} note={note} />
+                  // Displays all note lists
+                  <NotesListsContainer setShowLists={setShowLists}>
+                     {
+                        result.data?.getAllNotesLists.map((list: NotesList) => (
+                           <SingleListContainer key={list.id}>
+                              <SingleList list={list} setCurrentList={setCurrentList} />
+                           </SingleListContainer>
                         ))
-                        :
-                        <Heading size="md">No Notes to display :(</Heading>
                      }
-                  </NoteContainer>
+                     <Text>TODO: Create a page for creating note lists.</Text>
+                     <Text>TODO: Use editable Chakra components for updating notes.</Text>
+                  </NotesListsContainer>
+                  :
+                  // displays no note lists
+                  <Flex p="1%" borderRight="1px" borderColor="#CACACA">
+                     <IconButton
+                        aria-label="Open Lists"
+                        icon={<ArrowRightIcon />}
+                        onClick={() => {
+                           setShowLists(true)
+                        }}
+                     >Show Lists</IconButton>
+                  </Flex>
                }
-            </ListViewerContainer>
-         </Flex>
+               <ListViewerContainer>
+                  {!currentList
+                     ?
+                     <Box>
+                        <Heading size="md">Select a Note</Heading>
+                     </Box>
+                     :
+                     <NoteContainer>
+                        {currentList.notes.length > 0
+                           ?
+                           currentList.notes.map((note: NoteType) => (
+                              <Note key={note.id} note={note} />
+                           ))
+                           :
+                           <Heading size="md">No Notes to display :(</Heading>
+                        }
+                     </NoteContainer>
+                  }
+               </ListViewerContainer>
+            </Flex>
+         }
       </NotesLayout>
    )
 }
