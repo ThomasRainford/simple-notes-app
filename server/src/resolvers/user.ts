@@ -147,8 +147,6 @@ export class UserResolver {
 
       const result = await logoutPromise
 
-      console.log(result)
-
       if (!result) {
          return null
       }

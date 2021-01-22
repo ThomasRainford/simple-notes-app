@@ -1,6 +1,5 @@
 import { Client, dedupExchange, fetchExchange } from "urql"
 import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
-import { MeQueryVariables } from "../generated/graphql";
 
 export const createUrqlClient = (ssrExchange: any) => {
 
@@ -12,8 +11,15 @@ export const createUrqlClient = (ssrExchange: any) => {
             updates: {
                Mutation: {
                   logout: (result, args, cache, info) => {
-                     console.log(args)
+
                   },
+                  login: (result, args, cache, info) => {
+                     const allFields = cache.inspectFields('Query')
+                     const fieldInfos = allFields.filter((info) => info.fieldName === 'getAllNotesLists')
+                     fieldInfos.forEach((fi) => {
+                        cache.invalidate('Query', 'getAllNotesLists', fi.arguments || null)
+                     })
+                  }
                }
             }
          }),

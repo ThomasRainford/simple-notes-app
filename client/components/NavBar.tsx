@@ -54,10 +54,9 @@ const NavBar = ({ }) => {
                            <Button colorScheme="red" ml={3}
                               onClick={async () => {
                                  console.log('logout!')
-                                 const lg = await executeLogout()
-                                 console.log(lg)
+                                 const response = await executeLogout()
+                                 console.log(response)
                                  router.replace('/')
-                                 //console.log(result)
                               }}>
                               Log Out
                            </Button>
