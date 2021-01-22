@@ -1,4 +1,5 @@
-import { cacheExchange, Client, dedupExchange, fetchExchange } from "urql"
+import { Client, dedupExchange, fetchExchange } from "urql"
+import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
 
 export const createUrqlClient = (ssrExchange: any) => {
 
@@ -6,7 +7,22 @@ export const createUrqlClient = (ssrExchange: any) => {
       url: 'http://localhost:3000/graphql',
       exchanges: [
          dedupExchange,
-         cacheExchange,
+         cacheExchange({
+            updates: {
+               Mutation: {
+                  logout: (result, args, cache, info) => {
+
+                  },
+                  login: (result, args, cache, info) => {
+                     const allFields = cache.inspectFields('Query')
+                     const fieldInfos = allFields.filter((info) => info.fieldName === 'getAllNotesLists')
+                     fieldInfos.forEach((fi) => {
+                        cache.invalidate('Query', 'getAllNotesLists', fi.arguments || null)
+                     })
+                  }
+               }
+            }
+         }),
          ssrExchange,
          fetchExchange
       ],
