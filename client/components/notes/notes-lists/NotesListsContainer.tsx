@@ -1,7 +1,7 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
-import { Flex, CloseButton, Button } from '@chakra-ui/react'
-import React from 'react'
-import { useCreateListMutation } from '../../../generated/graphql'
+import { Flex, CloseButton, Button, useDisclosure } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import NewListDrawer from './NewListDrawer'
 
 interface Props {
    setShowLists: React.Dispatch<React.SetStateAction<boolean>>
@@ -9,28 +9,32 @@ interface Props {
 
 const NotesListsContainer: React.FC<Props> = ({ children, setShowLists }) => {
 
-   const [result, executeCreateList] = useCreateListMutation()
+   const disclosure = useDisclosure()
+   const btnRef = React.useRef()
 
    return (
-      <Flex direction="column" p="1%" borderRight="1px" borderColor="#CACACA" w="35%">
-         <Flex align="center" justify="space-between">
-            <CloseButton size="md"
-               onClick={() => {
-                  setShowLists(false)
-               }}
-            />
-            <Button colorScheme="teal" variant="outline" leftIcon={<HamburgerIcon />}
-               onClick={() => {
-
-               }}
-            >
-               New List
+      <>
+         <Flex direction="column" p="1%" borderRight="1px" borderColor="#CACACA" w="35%">
+            <Flex align="center" justify="space-between">
+               <CloseButton size="md"
+                  onClick={() => {
+                     setShowLists(false)
+                  }}
+               />
+               <Button ref={btnRef} colorScheme="teal" variant="outline" leftIcon={<HamburgerIcon />}
+                  onClick={disclosure.onOpen}
+               >
+                  New List
             </Button>
+            </Flex>
+            <Flex direction="column" mt="5%">
+               {children}
+            </Flex>
          </Flex>
-         <Flex direction="column" mt="5%">
-            {children}
-         </Flex>
-      </Flex >
+
+         <NewListDrawer disclosure={disclosure} btnRef={btnRef} />
+
+      </>
    )
 }
 
