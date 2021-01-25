@@ -1,6 +1,14 @@
 import { Client, dedupExchange, fetchExchange } from "urql"
 import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
 
+const invalidateAllLists = (cache: Cache) => {
+   const allFields = cache.inspectFields('Query')
+   const fieldInfos = allFields.filter((info) => info.fieldName === 'getAllNotesLists')
+   fieldInfos.forEach((fi) => {
+      cache.invalidate('Query', 'getAllNotesLists', fi.arguments || null)
+   })
+}
+
 export const createUrqlClient = (ssrExchange: any) => {
 
    return {
@@ -14,11 +22,10 @@ export const createUrqlClient = (ssrExchange: any) => {
 
                   },
                   login: (result, args, cache, info) => {
-                     const allFields = cache.inspectFields('Query')
-                     const fieldInfos = allFields.filter((info) => info.fieldName === 'getAllNotesLists')
-                     fieldInfos.forEach((fi) => {
-                        cache.invalidate('Query', 'getAllNotesLists', fi.arguments || null)
-                     })
+                     invalidateAllLists(cache)
+                  },
+                  createList: (result, args, cache, info) => {
+                     invalidateAllLists(cache)
                   }
                }
             }

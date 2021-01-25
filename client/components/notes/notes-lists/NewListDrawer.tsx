@@ -28,6 +28,8 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
 
       console.log(response)
 
+      onClose()
+
    }
 
    return (
@@ -61,7 +63,7 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
                      <Button variant="outline" mr={3} onClick={onClose}>
                         Cancel
                      </Button>
-                     <Button isLoading={formState.isSubmitting} type="submit" color="blue">
+                     <Button type="submit" color="blue" isLoading={formState.isSubmitting}>
                         Save
                      </Button>
 
