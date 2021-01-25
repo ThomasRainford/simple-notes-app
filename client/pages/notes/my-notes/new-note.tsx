@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from '@chakra-ui/react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import NotesLayout from '../../../components/notes/NotesLayout'
@@ -25,33 +25,43 @@ const NewNote = ({ }) => {
 
    return (
       <NotesLayout>
-         <Flex direction="column">
-            <form onSubmit={handleSubmit(onSubmit)}>
+         <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
 
-               <FormControl>
+               <FormControl my="5%">
                   <FormLabel>Title</FormLabel>
                   <Input
                      name="title"
-                     placeholder="title"
+                     placeholder="Title"
+                     autoComplete="off"
                      ref={register({ validate: validateTitle })}
+                     size="lg"
                   />
                   <FormErrorMessage>
                      {errors.title && errors.title.message}
                   </FormErrorMessage>
                </FormControl>
 
-               <FormControl>
-                  <FormLabel>text</FormLabel>
-                  <Input
+               <FormControl mb="5%">
+                  <FormLabel>Text</FormLabel>
+                  <Textarea
                      name="text"
                      placeholder="Text"
                      type="text"
+                     size="lg"
                      ref={register({ validate: validateText })}
                   />
                   <FormErrorMessage>
                      {errors.text && errors.text.message}
                   </FormErrorMessage>
                </FormControl>
+
+               <Button
+                  colorScheme="teal"
+                  mr="1%"
+               >
+                  Go Back
+               </Button>
                <Button
                   colorScheme="blue"
                   isLoading={formState.isSubmitting}
@@ -61,8 +71,8 @@ const NewNote = ({ }) => {
                </Button>
 
             </form>
-         </Flex>
-      </NotesLayout>
+         </Flex >
+      </NotesLayout >
    )
 }
 
