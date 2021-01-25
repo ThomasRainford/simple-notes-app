@@ -1,7 +1,8 @@
 import { EditIcon } from '@chakra-ui/icons'
-import { Button, Flex, IconButton } from '@chakra-ui/react'
+import { Button, Flex, IconButton, Link } from '@chakra-ui/react'
 import React from 'react'
 import { NotesList } from '../../../generated/graphql'
+import NextLink from 'next/link'
 
 interface Props {
    currentList: NotesList
@@ -13,9 +14,12 @@ const ListViewerContainer: React.FC<Props> = ({ children, currentList }) => {
          <Flex justify="flex-start" mb="1%">
             {currentList &&
 
-               <Button aria-label="New Note" colorScheme="teal" variant="outline" leftIcon={<EditIcon />}>
-                  New Note
-               </Button>
+               <NextLink href={'/notes/my-notes/new-note'}>
+                  <Button aria-label="New Note" colorScheme="teal" variant="outline" as={Link} leftIcon={<EditIcon />}>
+                     New Note
+                  </Button>
+               </NextLink>
+
             }
          </Flex>
          { children}

@@ -1,7 +1,10 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from '@chakra-ui/react'
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Link } from '@chakra-ui/react'
+import { withUrqlClient } from 'next-urql'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import NotesLayout from '../../../components/notes/NotesLayout'
+import { createUrqlClient } from '../../../utils/createUrqlClient'
+import NextLink from "next/link"
 
 interface Props {
 
@@ -56,12 +59,16 @@ const NewNote = ({ }) => {
                   </FormErrorMessage>
                </FormControl>
 
-               <Button
-                  colorScheme="teal"
-                  mr="1%"
-               >
-                  Go Back
-               </Button>
+
+               <NextLink href={'/notes/my-notes'}>
+                  <Button
+                     colorScheme="teal"
+                     mr="1%"
+                     as={Link}
+                  >
+                     Go Back
+                  </Button>
+               </NextLink>
                <Button
                   colorScheme="blue"
                   isLoading={formState.isSubmitting}
@@ -76,4 +83,4 @@ const NewNote = ({ }) => {
    )
 }
 
-export default NewNote
+export default withUrqlClient(createUrqlClient)(NewNote)
