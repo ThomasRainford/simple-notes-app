@@ -21,6 +21,18 @@ interface Props {
 
 }
 
+// TODO: 
+// - New list functionality.
+// - - Click new list,
+// - - New list box is added,
+// - - Enter list title,
+// - - Press create or cancel,
+// - - Create list query is sent,
+// - - Update the cache (cache.updateQuery()),
+// - - Display that lists notes (empty).
+// - Page for creating new notes.
+// - Page for updating notes. 
+
 const MyNotes = ({ }) => {
 
    const router = useRouter()

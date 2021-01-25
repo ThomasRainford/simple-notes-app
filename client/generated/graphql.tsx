@@ -187,6 +187,19 @@ export type UserRegisterInput = {
   password: Scalars['String'];
 };
 
+export type CreateListMutationVariables = Exact<{
+  title: Scalars['String'];
+}>;
+
+
+export type CreateListMutation = (
+  { __typename?: 'Mutation' }
+  & { createList: (
+    { __typename?: 'NotesList' }
+    & Pick<NotesList, '_id' | 'title'>
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -267,6 +280,18 @@ export type MeQuery = (
 );
 
 
+export const CreateListDocument = gql`
+    mutation CreateList($title: String!) {
+  createList(title: $title) {
+    _id
+    title
+  }
+}
+    `;
+
+export function useCreateListMutation() {
+  return Urql.useMutation<CreateListMutation, CreateListMutationVariables>(CreateListDocument);
+};
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
