@@ -1,3 +1,4 @@
+import { HamburgerIcon } from '@chakra-ui/icons'
 import { Flex, CloseButton, Button } from '@chakra-ui/react'
 import React from 'react'
 
@@ -15,7 +16,7 @@ const NotesListsContainer: React.FC<Props> = ({ children, setShowLists }) => {
                   setShowLists(false)
                }}
             />
-            <Button colorScheme="teal" variant="outline">
+            <Button colorScheme="teal" variant="outline" leftIcon={<HamburgerIcon />}>
                New List
             </Button>
          </Flex>

@@ -71,15 +71,10 @@ const MyNotes = ({ }) => {
                            </Box>
                            :
                            <NoteContainer>
-                              {currentList.notes.length > 0
-                                 ?
+                              {currentList.notes.length > 0 &&
                                  currentList.notes.map((note: NoteType) => (
                                     <Note key={note.id} note={note} />
                                  ))
-                                 :
-                                 <Button aria-label="New Note" colorScheme="teal" variant="outline" leftIcon={<EditIcon />}>
-                                    New Note
-                                 </Button>
                               }
                            </NoteContainer>
                         }

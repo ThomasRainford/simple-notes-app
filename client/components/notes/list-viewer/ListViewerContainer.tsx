@@ -10,8 +10,8 @@ interface Props {
 const ListViewerContainer: React.FC<Props> = ({ children, currentList }) => {
    return (
       <Flex direction="column" p="1%" borderLeft="1px" borderColor="#CACACA" w="100%">
-         <Flex justify="flex-end" mb="1%">
-            {currentList && currentList.notes.length > 0 &&
+         <Flex justify="flex-start" mb="1%">
+            {currentList &&
 
                <Button aria-label="New Note" colorScheme="teal" variant="outline" leftIcon={<EditIcon />}>
                   New Note
