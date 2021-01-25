@@ -1,5 +1,5 @@
-import { ArrowRightIcon } from '@chakra-ui/icons'
-import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
+import { ArrowRightIcon, EditIcon } from '@chakra-ui/icons'
+import { Box, Button, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
 import { initUrqlClient, withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -63,11 +63,11 @@ const MyNotes = ({ }) => {
                            >Show Lists</IconButton>
                         </Flex>
                      }
-                     <ListViewerContainer>
+                     <ListViewerContainer currentList={currentList}>
                         {!currentList
                            ?
                            <Box>
-                              <Heading size="md">Select a Note</Heading>
+                              <Heading size="md">{result.data.getAllNotesLists.length > 0 ? "Select a List" : "Create a List"}</Heading>
                            </Box>
                            :
                            <NoteContainer>
@@ -77,7 +77,9 @@ const MyNotes = ({ }) => {
                                     <Note key={note.id} note={note} />
                                  ))
                                  :
-                                 <Heading size="md">No Notes to display :(</Heading>
+                                 <Button aria-label="New Note" colorScheme="teal" variant="outline" leftIcon={<EditIcon />}>
+                                    New Note
+                                 </Button>
                               }
                            </NoteContainer>
                         }
