@@ -22,6 +22,7 @@ interface Props {
 }
 
 // TODO: 
+// - Open currentList after new notes page - Attach url query with listid, search getAllNotesLists.
 // - Page for updating notes. 
 
 const MyNotes = ({ }) => {
@@ -34,6 +35,15 @@ const MyNotes = ({ }) => {
    const [result] = useGetAllNotesListsQuery()
 
    useIsAuth(result)
+
+   useEffect(() => {
+      // Show the currentList after visiting new-notes page.
+      const listId = router.query.listId
+      if (listId && result.data) {
+         const list: NotesList = result.data.getAllNotesLists.find((list: NotesList) => list.id === listId) as NotesList
+         setCurrentList(list)
+      }
+   }, [router, result])
 
    return (
       <>
