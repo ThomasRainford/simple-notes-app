@@ -270,6 +270,26 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateNoteMutationVariables = Exact<{
+  noteLocation: NoteLocationInput;
+  updatedNoteFields: NoteUpdateInput;
+}>;
+
+
+export type UpdateNoteMutation = (
+  { __typename?: 'Mutation' }
+  & { updateNote?: Maybe<(
+    { __typename?: 'NoteResponse' }
+    & { note?: Maybe<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id' | 'title' | 'text'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'property' | 'message'>
+    )>> }
+  )> }
+);
+
 export type GetAllNotesListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -375,6 +395,25 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateNoteDocument = gql`
+    mutation UpdateNote($noteLocation: NoteLocationInput!, $updatedNoteFields: NoteUpdateInput!) {
+  updateNote(noteLocation: $noteLocation, updatedNoteFields: $updatedNoteFields) {
+    note {
+      id
+      title
+      text
+    }
+    errors {
+      property
+      message
+    }
+  }
+}
+    `;
+
+export function useUpdateNoteMutation() {
+  return Urql.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(UpdateNoteDocument);
 };
 export const GetAllNotesListsDocument = gql`
     query GetAllNotesLists {

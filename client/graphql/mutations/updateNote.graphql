@@ -1,0 +1,19 @@
+mutation UpdateNote(
+	$noteLocation: NoteLocationInput!
+	$updatedNoteFields: NoteUpdateInput!
+) {
+	updateNote(
+		noteLocation: $noteLocation
+		updatedNoteFields: $updatedNoteFields
+	) {
+		note {
+			id
+			title
+			text
+		}
+		errors {
+			property
+			message
+		}
+	}
+}

@@ -6,7 +6,7 @@ import NotesLayout from '../../../components/notes/NotesLayout'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 import NextLink from "next/link"
 import { useRouter } from 'next/router'
-import { useAddNoteMutation, NoteInput } from '../../../generated/graphql'
+import { useAddNoteMutation, NoteInput, useUpdateNoteMutation, NoteLocationInput, NoteUpdateInput } from '../../../generated/graphql'
 
 interface Props {
 
@@ -17,7 +17,8 @@ const NewNote = ({ }) => {
    const { handleSubmit, errors, register, formState } = useForm()
    const router = useRouter()
 
-   const [result, executeAddNote] = useAddNoteMutation()
+   const [addNoteResult, executeAddNote] = useAddNoteMutation()
+   const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
 
    const validateTitle = () => {
       return true
@@ -27,12 +28,17 @@ const NewNote = ({ }) => {
       return true
    }
 
-   const onSubmit = async (noteInput: NoteInput) => {
+   const onSubmit = async (updatedNoteFields: NoteUpdateInput) => {
       const listId = router.query.listId as string
 
-      //const response = await executeAddNote({ listId, noteInput })
+      const noteLocation: NoteLocationInput = {
+         listId,
+         noteId: addNoteResult.data.addNote.note.id
+      }
 
-      //console.log(response)
+      const response = await executeUpdateNote({ noteLocation, updatedNoteFields })
+
+      console.log(response)
    }
 
    useEffect(() => {
@@ -41,7 +47,7 @@ const NewNote = ({ }) => {
 
       async function addNote() {
          const response = await executeAddNote({ listId, noteInput })
-         //console.log('AddNote: ', response)
+         console.log('AddNote: ', response)
       }
 
       addNote()
