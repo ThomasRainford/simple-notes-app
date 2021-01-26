@@ -21,11 +21,16 @@ const NotesListsContainer: React.FC<Props> = ({ children, setShowLists }) => {
                      setShowLists(false)
                   }}
                />
-               <Button ref={btnRef} colorScheme="teal" variant="outline" leftIcon={<AddIcon />}
+               <Button
+                  ref={btnRef}
+                  colorScheme="teal"
+                  variant="outline"
+                  leftIcon={<AddIcon />}
+                  _hover={{ backgroundColor: "grey", textColor: "white" }}
                   onClick={disclosure.onOpen}
                >
                   New List
-            </Button>
+               </Button>
             </Flex>
             <Flex direction="column" mt="5%">
                {children}
