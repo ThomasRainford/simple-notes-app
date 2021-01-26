@@ -1,4 +1,4 @@
-import { HamburgerIcon } from '@chakra-ui/icons'
+import { AddIcon } from '@chakra-ui/icons'
 import { Flex, CloseButton, Button, useDisclosure } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import NewListDrawer from './NewListDrawer'
@@ -21,7 +21,7 @@ const NotesListsContainer: React.FC<Props> = ({ children, setShowLists }) => {
                      setShowLists(false)
                   }}
                />
-               <Button ref={btnRef} colorScheme="teal" variant="outline" leftIcon={<HamburgerIcon />}
+               <Button ref={btnRef} colorScheme="teal" variant="outline" leftIcon={<AddIcon />}
                   onClick={disclosure.onOpen}
                >
                   New List

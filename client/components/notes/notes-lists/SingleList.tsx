@@ -1,4 +1,5 @@
-import { Button, Flex, Text } from '@chakra-ui/react'
+import { ChevronRightIcon } from '@chakra-ui/icons'
+import { Flex, IconButton, Text, Tooltip } from '@chakra-ui/react'
 import React from 'react'
 import { NotesList } from '../../../generated/graphql'
 
@@ -11,9 +12,11 @@ const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
    return (
       <Flex justify="space-between" align="center" w="100%" m="5%" >
          <Text>{list.title}</Text>
-         <Button size="sm"
-            onClick={() => setCurrentList(list)}
-         >View</Button>
+         <Tooltip hasArrow label="View Notes" bg="blue.500">
+            <IconButton aria-label="View notes" size="sm" icon={<ChevronRightIcon />}
+               onClick={() => setCurrentList(list)}
+            />
+         </Tooltip>
       </Flex >
    )
 }
