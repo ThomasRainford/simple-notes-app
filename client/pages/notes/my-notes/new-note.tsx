@@ -73,7 +73,7 @@ const NewNote = ({ }) => {
                   </FormErrorMessage>
                </FormControl>
 
-               <NextLink href={'/notes/my-notes'}>
+               <NextLink href={`/notes/my-notes?listId=${router.query.listId}`}>
                   <Button
                      colorScheme="teal"
                      mr="1%"
