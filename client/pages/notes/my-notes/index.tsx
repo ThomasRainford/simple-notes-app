@@ -4,33 +4,24 @@ import { initUrqlClient, withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { cacheExchange, dedupExchange, fetchExchange, ssrExchange } from 'urql'
-import ListViewerContainer from '../../components/notes/list-viewer/ListViewerContainer'
-import Note from '../../components/notes/list-viewer/Note'
-import NoteContainer from '../../components/notes/list-viewer/NoteContainer'
-import LoadingIndicator from '../../components/notes/LoadingIndicator'
-import NotesListsContainer from '../../components/notes/notes-lists/NotesListsContainer'
-import SingleList from '../../components/notes/notes-lists/SingleList'
-import SingleListContainer from '../../components/notes/notes-lists/SingleListContainer'
-import NotesLayout from '../../components/notes/NotesLayout'
-import { Note as NoteType, NotesList, useGetAllNotesListsQuery } from '../../generated/graphql'
-import { createUrqlClient } from '../../utils/createUrqlClient'
-import { GET_ALL_NOTES_lISTS_QUERY } from '../../utils/ssr-queries/getAllNotesListQuery'
-import { useIsAuth } from '../../utils/useIsAuth'
+import ListViewerContainer from '../../../components/notes/list-viewer/ListViewerContainer'
+import Note from '../../../components/notes/list-viewer/Note'
+import NoteContainer from '../../../components/notes/list-viewer/NoteContainer'
+import LoadingIndicator from '../../../components/notes/LoadingIndicator'
+import NotesListsContainer from '../../../components/notes/notes-lists/NotesListsContainer'
+import SingleList from '../../../components/notes/notes-lists/SingleList'
+import SingleListContainer from '../../../components/notes/notes-lists/SingleListContainer'
+import NotesLayout from '../../../components/notes/NotesLayout'
+import { Note as NoteType, NotesList, useGetAllNotesListsQuery } from '../../../generated/graphql'
+import { createUrqlClient } from '../../../utils/createUrqlClient'
+import { GET_ALL_NOTES_lISTS_QUERY } from '../../../utils/ssr-queries/getAllNotesListQuery'
+import { useIsAuth } from '../../../utils/useIsAuth'
 
 interface Props {
 
 }
 
 // TODO: 
-// - New list functionality.
-// - - Click new list,
-// - - New list box is added,
-// - - Enter list title,
-// - - Press create or cancel,
-// - - Create list query is sent,
-// - - Update the cache (cache.updateQuery()),
-// - - Display that lists notes (empty).
-// - Page for creating new notes.
 // - Page for updating notes. 
 
 const MyNotes = ({ }) => {

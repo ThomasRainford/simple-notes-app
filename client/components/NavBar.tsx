@@ -2,6 +2,7 @@ import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, Al
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import { useLogoutMutation } from '../generated/graphql'
+import NextLink from 'next/link'
 
 interface Props {
 
@@ -25,13 +26,15 @@ const NavBar = ({ }) => {
          p="2%"
       >
          <Box>
-            <Heading size='lg'>Simple Notes App</Heading>
+            <NextLink href="/">
+               <Heading as={Link} size='lg'>Simple Notes App</Heading>
+            </NextLink>
          </Box>
          <Flex>
             <Box>
-               <Link onClick={() => setIsOpen(true)}>
+               <Button variant="outline" onClick={() => setIsOpen(true)} _hover={{ bg: "white", textColor: "#488BFF" }}>
                   Logout
-               </Link>
+               </Button>
 
                {/* Alert dialog for logging out */}
                <AlertDialog
