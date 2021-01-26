@@ -26,6 +26,9 @@ export const createUrqlClient = (ssrExchange: any) => {
                   },
                   createList: (result, args, cache, info) => {
                      invalidateAllLists(cache)
+                  },
+                  addNote: (result, args, cache, info) => {
+                     invalidateAllLists(cache)
                   }
                }
             }
