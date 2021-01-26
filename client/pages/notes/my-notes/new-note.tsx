@@ -62,6 +62,7 @@ const NewNote = ({ }) => {
                   <FormLabel>Text</FormLabel>
                   <Textarea
                      name="text"
+                     variant="flushed"
                      placeholder="Text"
                      type="text"
                      size="lg"
