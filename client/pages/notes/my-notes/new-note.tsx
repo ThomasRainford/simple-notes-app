@@ -1,6 +1,6 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Link, Text, Center, Divider, Heading } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import NotesLayout from '../../../components/notes/NotesLayout'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
@@ -30,10 +30,22 @@ const NewNote = ({ }) => {
    const onSubmit = async (noteInput: NoteInput) => {
       const listId = router.query.listId as string
 
-      const response = await executeAddNote({ listId, noteInput })
+      //const response = await executeAddNote({ listId, noteInput })
 
-      console.log(response)
+      //console.log(response)
    }
+
+   useEffect(() => {
+      const noteInput: NoteInput = { title: '', text: '' }
+      const listId = router.query.listId as string
+
+      async function addNote() {
+         const response = await executeAddNote({ listId, noteInput })
+         //console.log('AddNote: ', response)
+      }
+
+      addNote()
+   }, [router, executeAddNote])
 
    return (
       <NotesLayout>

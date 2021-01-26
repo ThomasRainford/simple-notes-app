@@ -22,7 +22,10 @@ interface Props {
 }
 
 // TODO: 
-// - Open currentList after new notes page - Attach url query with listid, search getAllNotesLists.
+// Better save functionality:
+// - Pressing 'New Note' will send addNote mutation with empty field.
+// - Pressing 'Save' button in new-note screen will update the note.
+// - Pressing 'Go Back' with out saving will display an alert. Accepting will delete that note.
 // - Page for updating notes. 
 
 const MyNotes = ({ }) => {

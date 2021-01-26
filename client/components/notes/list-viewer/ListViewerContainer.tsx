@@ -1,7 +1,7 @@
 import { EditIcon } from '@chakra-ui/icons'
 import { Button, Flex, IconButton, Link } from '@chakra-ui/react'
 import React from 'react'
-import { NotesList } from '../../../generated/graphql'
+import { NoteInput, NotesList, useAddNoteMutation } from '../../../generated/graphql'
 import NextLink from 'next/link'
 
 interface Props {
@@ -9,6 +9,9 @@ interface Props {
 }
 
 const ListViewerContainer: React.FC<Props> = ({ children, currentList }) => {
+
+   const [result, executeAddNote] = useAddNoteMutation()
+
    return (
       <Flex direction="column" p="1%" borderLeft="1px" borderColor="#CACACA" w="100%">
          <Flex justify="flex-start" mb="1%">
@@ -22,6 +25,12 @@ const ListViewerContainer: React.FC<Props> = ({ children, currentList }) => {
                      as={Link}
                      leftIcon={<EditIcon />}
                      _hover={{ backgroundColor: "grey", textColor: "white" }}
+                     onClick={async () => {
+                        const noteInput: NoteInput = { title: '', text: '' }
+                        const listId = currentList.id
+                        //const response = await executeAddNote({ listId, noteInput })
+                        //console.log('AddNote: ', response)
+                     }}
                   >
                      New Note
                   </Button>

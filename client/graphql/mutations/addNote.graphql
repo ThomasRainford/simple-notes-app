@@ -1,6 +1,6 @@
 mutation AddNote($listId: String!, $noteInput: NoteInput!) {
 	addNote(listId: $listId, noteInput: $noteInput) {
-		notesList {
+		note {
 			id
 		}
 		errors {

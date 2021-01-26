@@ -99,7 +99,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createList: NotesList;
   updateNotesList: NotesListResponse;
-  addNote?: Maybe<NotesListResponse>;
+  addNote?: Maybe<NoteResponse>;
   updateNote?: Maybe<NoteResponse>;
   deleteNotesList: Scalars['Boolean'];
   deleteNote: Scalars['Boolean'];
@@ -196,10 +196,10 @@ export type AddNoteMutationVariables = Exact<{
 export type AddNoteMutation = (
   { __typename?: 'Mutation' }
   & { addNote?: Maybe<(
-    { __typename?: 'NotesListResponse' }
-    & { notesList?: Maybe<(
-      { __typename?: 'NotesList' }
-      & Pick<NotesList, 'id'>
+    { __typename?: 'NoteResponse' }
+    & { note?: Maybe<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id'>
     )>, errors?: Maybe<Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'property' | 'message'>
@@ -303,7 +303,7 @@ export type MeQuery = (
 export const AddNoteDocument = gql`
     mutation AddNote($listId: String!, $noteInput: NoteInput!) {
   addNote(listId: $listId, noteInput: $noteInput) {
-    notesList {
+    note {
       id
     }
     errors {
