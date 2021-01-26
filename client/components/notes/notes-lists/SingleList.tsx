@@ -11,7 +11,7 @@ interface Props {
 const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
    return (
       <Flex justify="space-between" align="center" w="100%" m="5%" >
-         <Text>{list.title}</Text>
+         <Text as="strong">{list.title}</Text>
          <Flex align="center" justify="flex-end" width="50%">
             <Menu isLazy>
                <MenuButton
