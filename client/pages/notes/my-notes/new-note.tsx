@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import NotesLayout from '../../../components/notes/NotesLayout'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 import NextLink from "next/link"
+import { useRouter } from 'next/router'
+import { useAddNoteMutation, NoteInput } from '../../../generated/graphql'
 
 interface Props {
 
@@ -13,6 +15,9 @@ interface Props {
 const NewNote = ({ }) => {
 
    const { handleSubmit, errors, register, formState } = useForm()
+   const router = useRouter()
+
+   const [result, executeAddNote] = useAddNoteMutation()
 
    const validateTitle = () => {
       return true
@@ -22,8 +27,12 @@ const NewNote = ({ }) => {
       return true
    }
 
-   const onSubmit = () => {
+   const onSubmit = async (noteInput: NoteInput) => {
+      const listId = router.query.listId as string
 
+      const response = await executeAddNote({ listId, noteInput })
+
+      console.log(response)
    }
 
    return (
@@ -59,7 +68,6 @@ const NewNote = ({ }) => {
                   </FormErrorMessage>
                </FormControl>
 
-
                <NextLink href={'/notes/my-notes'}>
                   <Button
                      colorScheme="teal"
@@ -79,7 +87,7 @@ const NewNote = ({ }) => {
 
             </form>
          </Flex >
-      </NotesLayout >
+      </NotesLayout>
    )
 }
 

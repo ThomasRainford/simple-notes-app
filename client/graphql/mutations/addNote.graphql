@@ -1,0 +1,11 @@
+mutation AddNote($listId: String!, $noteInput: NoteInput!) {
+	addNote(listId: $listId, noteInput: $noteInput) {
+		notesList {
+			id
+		}
+		errors {
+			property
+			message
+		}
+	}
+}

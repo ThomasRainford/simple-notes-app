@@ -187,6 +187,26 @@ export type UserRegisterInput = {
   password: Scalars['String'];
 };
 
+export type AddNoteMutationVariables = Exact<{
+  listId: Scalars['String'];
+  noteInput: NoteInput;
+}>;
+
+
+export type AddNoteMutation = (
+  { __typename?: 'Mutation' }
+  & { addNote?: Maybe<(
+    { __typename?: 'NotesListResponse' }
+    & { notesList?: Maybe<(
+      { __typename?: 'NotesList' }
+      & Pick<NotesList, 'id'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'property' | 'message'>
+    )>> }
+  )> }
+);
+
 export type CreateListMutationVariables = Exact<{
   title: Scalars['String'];
 }>;
@@ -280,6 +300,23 @@ export type MeQuery = (
 );
 
 
+export const AddNoteDocument = gql`
+    mutation AddNote($listId: String!, $noteInput: NoteInput!) {
+  addNote(listId: $listId, noteInput: $noteInput) {
+    notesList {
+      id
+    }
+    errors {
+      property
+      message
+    }
+  }
+}
+    `;
+
+export function useAddNoteMutation() {
+  return Urql.useMutation<AddNoteMutation, AddNoteMutationVariables>(AddNoteDocument);
+};
 export const CreateListDocument = gql`
     mutation CreateList($title: String!) {
   createList(title: $title) {

@@ -14,7 +14,7 @@ const ListViewerContainer: React.FC<Props> = ({ children, currentList }) => {
          <Flex justify="flex-start" mb="1%">
             {currentList &&
 
-               <NextLink href={'/notes/my-notes/new-note'}>
+               <NextLink href={`/notes/my-notes/new-note?listId=${currentList.id}`}>
                   <Button aria-label="New Note" colorScheme="teal" variant="outline" as={Link} leftIcon={<EditIcon />}>
                      New Note
                   </Button>
