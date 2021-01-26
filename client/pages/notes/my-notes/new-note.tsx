@@ -1,12 +1,12 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Link, Text, Center, Divider, Heading } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import NotesLayout from '../../../components/notes/NotesLayout'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 import NextLink from "next/link"
 import { useRouter } from 'next/router'
-import { useAddNoteMutation, NoteInput, useUpdateNoteMutation, NoteLocationInput, NoteUpdateInput } from '../../../generated/graphql'
+import { useAddNoteMutation, NoteInput, useUpdateNoteMutation, NoteLocationInput, NoteUpdateInput, useDeleteNoteMutation } from '../../../generated/graphql'
 
 interface Props {
 
@@ -14,11 +14,13 @@ interface Props {
 
 const NewNote = ({ }) => {
 
-   const { handleSubmit, errors, register, formState } = useForm()
    const router = useRouter()
+   const { handleSubmit, errors, register, formState } = useForm()
+   const [saved, setSaved] = useState<boolean>(false)
 
    const [addNoteResult, executeAddNote] = useAddNoteMutation()
    const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
+   const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
 
    const validateTitle = () => {
       return true
@@ -37,8 +39,6 @@ const NewNote = ({ }) => {
       }
 
       const response = await executeUpdateNote({ noteLocation, updatedNoteFields })
-
-      console.log(response)
    }
 
    useEffect(() => {
@@ -47,7 +47,6 @@ const NewNote = ({ }) => {
 
       async function addNote() {
          const response = await executeAddNote({ listId, noteInput })
-         console.log('AddNote: ', response)
       }
 
       addNote()
@@ -96,6 +95,19 @@ const NewNote = ({ }) => {
                      colorScheme="teal"
                      mr="1%"
                      as={Link}
+                     onClick={async () => {
+                        if (!saved) {
+                           const listId = router.query.listId as string
+
+                           const noteLocation: NoteLocationInput = {
+                              listId,
+                              noteId: addNoteResult.data.addNote.note.id
+                           }
+                           const response = await executeDeleteNote({ noteLocation })
+
+                           console.log('DeleteNote: ', response)
+                        }
+                     }}
                   >
                      Go Back
                   </Button>
@@ -104,6 +116,7 @@ const NewNote = ({ }) => {
                   colorScheme="blue"
                   isLoading={formState.isSubmitting}
                   type="submit"
+                  onClick={() => setSaved(true)}
                >
                   Save
                </Button>
