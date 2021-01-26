@@ -22,7 +22,6 @@ interface Props {
 }
 
 // TODO: 
-// - Page for creating new notes.
 // - Page for updating notes. 
 
 const MyNotes = ({ }) => {

@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Link } from '@chakra-ui/react'
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Link, Text, Center, Divider, Heading } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -38,9 +38,13 @@ const NewNote = ({ }) => {
    return (
       <NotesLayout>
          <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
+            <Heading fontSize="2xl">New Note</Heading>
+            <Center py="1%" width="100%">
+               <Divider orientation="horizontal" />
+            </Center>
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
 
-               <FormControl my="5%">
+               <FormControl mb="5%" mt="2%">
                   <FormLabel>Title</FormLabel>
                   <Input
                      name="title"
