@@ -20,7 +20,7 @@ const Note: React.FC<Props> = ({ note }) => {
       <Flex p="1.5%" shadow="md" bg="#EAEAEA" align="center" justify="space-between" onMouseEnter={setMenu} onMouseLeave={setMenu}>
          <Flex direction="column">
             <Heading size="md">{title}</Heading>
-            <Text>{text}</Text>
+            <Text whiteSpace="pre-wrap">{text}</Text>
          </Flex>
          {viewMenu &&
 
