@@ -2,7 +2,8 @@ import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, Al
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { useLogoutMutation } from '../generated/graphql'
+import { UseQueryState } from 'urql'
+import { MeQuery, useLogoutMutation } from '../generated/graphql'
 
 interface Props {
    user: UseQueryState<MeQuery, object>
@@ -31,9 +32,9 @@ const NavBar: React.FC<Props> = ({ user }) => {
                   <Heading as={Link} size='lg'>Simple Notes App</Heading>
                </NextLink>
             </Box>
-            <Flex>
+            <Flex align="center">
                {!user.fetching && user.data &&
-                  <Text>{user.data.me.username}</Text>
+                  <Text mr="5%">{user.data.me.username}</Text>
                }
                <Button variant="outline" onClick={() => setIsOpen(true)} _hover={{ bg: "white", textColor: "#488BFF" }}>
                   Logout

@@ -9,6 +9,14 @@ const invalidateAllLists = (cache: Cache) => {
    })
 }
 
+const invalidateMeQuery = (cache: Cache) => {
+   const allFields = cache.inspectFields('Query')
+   const fieldInfos = allFields.filter((info) => info.fieldName === 'me')
+   fieldInfos.forEach((fi) => {
+      cache.invalidate('Query', 'me', fi.arguments || null)
+   })
+}
+
 export const createUrqlClient = (ssrExchange: any) => {
 
    return {
@@ -23,6 +31,7 @@ export const createUrqlClient = (ssrExchange: any) => {
                   },
                   login: (result, args, cache, info) => {
                      invalidateAllLists(cache)
+                     invalidateMeQuery(cache)
                   },
                   createList: (result, args, cache, info) => {
                      invalidateAllLists(cache)
