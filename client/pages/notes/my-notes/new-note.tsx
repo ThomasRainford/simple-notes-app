@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import AutoResizeTextarea from '../../../components/AutosizeTextArea'
 import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
 import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
+import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
 import { NoteInput, NoteLocationInput, NoteUpdateInput, useAddNoteMutation, useDeleteNoteMutation, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
@@ -101,7 +102,8 @@ const NewNote = ({ }) => {
 
    return (
       <>
-         {!user.fetching && user.data.me &&
+         {!user.fetching && user.data.me
+            ?
             <NotesLayout user={user}>
                <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
                   <Heading fontSize="2xl">New Note</Heading>
@@ -152,6 +154,8 @@ const NewNote = ({ }) => {
                   </form>
                </Flex >
             </NotesLayout>
+            :
+            <LoadingIndicator />
          }
 
          <GoBackAlertDialog isOpen={isGoBackOpen} onClose={onGoBackClose} deleteNote={deleteNote} />
