@@ -68,6 +68,7 @@ const Login = ({ }) => {
                <Input
                   name="usernameOrEmail"
                   placeholder="Username or Email"
+                  autoComplete="off"
                   ref={register({ validate: validateUsernameOrEmail })}
                />
                <FormErrorMessage>
