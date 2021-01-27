@@ -40,6 +40,7 @@ const GoBackAlertDialog: React.FC<Props> = ({ isOpen, onClose, deleteNote }) => 
                      onClick={async () => {
                         await deleteNote()
                         onClose()
+                        localStorage.removeItem('noteId')
                         router.replace(`/notes/my-notes?listId=${router.query.listId}`)
                      }}
                   >

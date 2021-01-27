@@ -46,7 +46,7 @@ const NewNote = ({ }) => {
 
          const noteLocation: NoteLocationInput = {
             listId,
-            noteId: addNoteResult.data.addNote.note.id
+            noteId: localStorage.getItem('noteId')
          }
 
          const response = await executeUpdateNote({ noteLocation, updatedNoteFields })
@@ -60,6 +60,7 @@ const NewNote = ({ }) => {
       if (!saved) {
          setIsGoBackOpen(true)
       } else {
+         localStorage.removeItem('noteId')
          router.replace(`/notes/my-notes?listId=${router.query.listId}`)
       }
    }
@@ -69,11 +70,12 @@ const NewNote = ({ }) => {
 
       const noteLocation: NoteLocationInput = {
          listId,
-         noteId: addNoteResult.data.addNote.note.id
+         noteId: localStorage.getItem('noteId')
       }
-      const response = await executeDeleteNote({ noteLocation })
 
-      console.log('DeleteNote: ', response)
+      if (noteLocation.noteId) {
+         const response = await executeDeleteNote({ noteLocation })
+      }
    }
 
    useEffect(() => {
@@ -81,11 +83,16 @@ const NewNote = ({ }) => {
       const listId = router.query.listId as string
 
       async function addNote() {
-         const response = await executeAddNote({ listId, noteInput })
+         if (!localStorage.getItem('noteId')) {
+            const response = await executeAddNote({ listId, noteInput })
+            localStorage.setItem('noteId', response.data.addNote.note.id)
+         }
       }
 
       // Add an empty note when the page renders.
-      addNote()
+      if (listId) {
+         addNote()
+      }
    }, [router, executeAddNote])
 
    return (
@@ -115,14 +122,6 @@ const NewNote = ({ }) => {
                   <FormControl mb="5%">
                      <FormLabel>Text</FormLabel>
                      <AutoResizeTextarea ref={register({ validate: validateText })} />
-                     {/* <Textarea
-                        name="text"
-                        variant="flushed"
-                        placeholder="Text"
-                        type="text"
-                        size="lg"
-                        ref={register({ validate: validateText })}
-                     /> */}
                      <FormErrorMessage>
                         {errors.text && errors.text.message}
                      </FormErrorMessage>

@@ -2,6 +2,8 @@ mutation AddNote($listId: String!, $noteInput: NoteInput!) {
 	addNote(listId: $listId, noteInput: $noteInput) {
 		note {
 			id
+			title
+			text
 		}
 		errors {
 			property

@@ -199,7 +199,7 @@ export type AddNoteMutation = (
     { __typename?: 'NoteResponse' }
     & { note?: Maybe<(
       { __typename?: 'Note' }
-      & Pick<Note, 'id'>
+      & Pick<Note, 'id' | 'title' | 'text'>
     )>, errors?: Maybe<Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'property' | 'message'>
@@ -335,6 +335,8 @@ export const AddNoteDocument = gql`
   addNote(listId: $listId, noteInput: $noteInput) {
     note {
       id
+      title
+      text
     }
     errors {
       property
