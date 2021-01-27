@@ -6,9 +6,11 @@ import { useForm } from 'react-hook-form'
 import AutoResizeTextarea from '../../../components/AutosizeTextArea'
 import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
 import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
+import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { NoteInput, NoteLocationInput, NoteUpdateInput, useAddNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } from '../../../generated/graphql'
+import { NoteInput, NoteLocationInput, NoteUpdateInput, useAddNoteMutation, useDeleteNoteMutation, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
+import { useIsAuth } from '../../../utils/useIsAuth'
 
 interface Props {
 
@@ -28,6 +30,9 @@ const NewNote = ({ }) => {
    const [addNoteResult, executeAddNote] = useAddNoteMutation()
    const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
    const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
+   const [user] = useMeQuery()
+
+   useIsAuth(user)
 
    const validateTitle = () => {
       return true
@@ -97,56 +102,61 @@ const NewNote = ({ }) => {
 
    return (
       <>
-         <NotesLayout>
-            <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
-               <Heading fontSize="2xl">New Note</Heading>
-               <Center py="1%" width="100%">
-                  <Divider orientation="horizontal" />
-               </Center>
-               <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+         {!user.fetching && user.data.me
+            ?
+            <NotesLayout user={user}>
+               <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
+                  <Heading fontSize="2xl">New Note</Heading>
+                  <Center py="1%" width="100%">
+                     <Divider orientation="horizontal" />
+                  </Center>
+                  <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
 
-                  <FormControl mb="5%" mt="2%">
-                     <FormLabel>Title</FormLabel>
-                     <Input
-                        name="title"
-                        placeholder="Title"
-                        autoComplete="off"
-                        ref={register({ validate: validateTitle })}
-                        size="lg"
-                     />
-                     <FormErrorMessage>
-                        {errors.title && errors.title.message}
-                     </FormErrorMessage>
-                  </FormControl>
+                     <FormControl mb="5%" mt="2%">
+                        <FormLabel>Title</FormLabel>
+                        <Input
+                           name="title"
+                           placeholder="Title"
+                           autoComplete="off"
+                           ref={register({ validate: validateTitle })}
+                           size="lg"
+                        />
+                        <FormErrorMessage>
+                           {errors.title && errors.title.message}
+                        </FormErrorMessage>
+                     </FormControl>
 
-                  <FormControl mb="5%">
-                     <FormLabel>Text</FormLabel>
-                     <AutoResizeTextarea ref={register({ validate: validateText })} />
-                     <FormErrorMessage>
-                        {errors.text && errors.text.message}
-                     </FormErrorMessage>
-                  </FormControl>
+                     <FormControl mb="5%">
+                        <FormLabel>Text</FormLabel>
+                        <AutoResizeTextarea ref={register({ validate: validateText })} />
+                        <FormErrorMessage>
+                           {errors.text && errors.text.message}
+                        </FormErrorMessage>
+                     </FormControl>
 
-                  <Button
-                     colorScheme="teal"
-                     mr="1%"
-                     as={Link}
-                     onClick={() => handleGoBack()}
-                  >
-                     Go Back
+                     <Button
+                        colorScheme="teal"
+                        mr="1%"
+                        as={Link}
+                        onClick={() => handleGoBack()}
+                     >
+                        Go Back
                   </Button>
-                  <Button
-                     colorScheme="blue"
-                     isLoading={formState.isSubmitting}
-                     type="submit"
-                     onClick={() => setSaved(true)}
-                  >
-                     Save
+                     <Button
+                        colorScheme="blue"
+                        isLoading={formState.isSubmitting}
+                        type="submit"
+                        onClick={() => setSaved(true)}
+                     >
+                        Save
                   </Button>
 
-               </form>
-            </Flex >
-         </NotesLayout>
+                  </form>
+               </Flex >
+            </NotesLayout>
+            :
+            <LoadingIndicator />
+         }
 
          <GoBackAlertDialog isOpen={isGoBackOpen} onClose={onGoBackClose} deleteNote={deleteNote} />
          <SaveAlertDialog isOpen={isSaveOpen} onClose={onSaveClose} />
