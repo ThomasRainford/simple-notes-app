@@ -9,6 +9,7 @@ import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import NotesLayout from '../../../components/notes/NotesLayout'
 import { NoteInput, NoteLocationInput, NoteUpdateInput, useAddNoteMutation, useDeleteNoteMutation, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
+import { useIsAuth } from '../../../utils/useIsAuth'
 
 interface Props {
 
@@ -29,6 +30,8 @@ const NewNote = ({ }) => {
    const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
    const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
    const [user] = useMeQuery()
+
+   useIsAuth(user)
 
    const validateTitle = () => {
       return true

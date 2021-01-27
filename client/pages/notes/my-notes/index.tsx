@@ -36,7 +36,7 @@ const MyNotes = ({ }) => {
    const [user] = useMeQuery()
    const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
 
-   useIsAuth(result)
+   useIsAuth(user)
 
    useEffect(() => {
       // Show the currentList after visiting new-notes page.
@@ -63,7 +63,7 @@ const MyNotes = ({ }) => {
 
    return (
       <>
-         { !result.fetching && !result.error // only render page when user is logged in.
+         { !user.fetching && user.data?.me // only render page when user is logged in.
             ?
             <NotesLayout user={user}>
                {result.data?.getAllNotesLists &&
