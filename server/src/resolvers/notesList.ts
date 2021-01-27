@@ -161,13 +161,13 @@ export class NotesListResolver {
       return { notesList }
    }
 
-   @Mutation(() => NotesListResponse, { nullable: true })
+   @Mutation(() => NoteResponse, { nullable: true })
    @UseMiddleware(isAuth)
    async addNote(
       @Arg('listId') listId: string,
       @Arg('noteInput') noteInput: NoteInput,
       @Ctx() { em, req }: OrmContext
-   ): Promise<NotesListResponse> {
+   ): Promise<NoteResponse> {
 
       const repo = em.getRepository(NotesList)
 
@@ -209,7 +209,7 @@ export class NotesListResolver {
       notesList.notes = [...notesList.notes, note]
       em.persistAndFlush(notesList)
 
-      return { notesList }
+      return { note }
    }
 
    @Mutation(() => NoteResponse, { nullable: true })

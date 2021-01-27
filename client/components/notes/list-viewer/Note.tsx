@@ -1,23 +1,26 @@
 import { EditIcon, HamburgerIcon, WarningIcon } from '@chakra-ui/icons'
 import { Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { Note as NoteType } from '../../../generated/graphql'
+import { Note as NoteType, NoteLocationInput, useDeleteNoteMutation } from '../../../generated/graphql'
 
 interface Props {
    note: NoteType
+   listId: string
 }
 
-const Note: React.FC<Props> = ({ note }) => {
+const Note: React.FC<Props> = ({ note, listId }) => {
 
-   const { title, text } = note
+   const { id, title, text } = note
 
    const [viewMenu, setViewMenu] = useState<boolean>(false)
-   const setMenu = () => {
-      setViewMenu(!viewMenu)
+   const setMenu = (value: boolean) => {
+      setViewMenu(value)
    }
 
+   const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
+
    return (
-      <Flex p="1.5%" shadow="md" bg="#EAEAEA" align="center" justify="space-between" onMouseEnter={setMenu} onMouseLeave={setMenu}>
+      <Flex p="1.5%" shadow="md" bg="#EAEAEA" align="center" justify="space-between" onMouseEnter={() => setMenu(true)} onMouseLeave={() => setMenu(false)}>
          <Flex direction="column">
             <Heading size="md">{title}</Heading>
             <Text whiteSpace="pre-wrap">{text}</Text>
@@ -33,8 +36,22 @@ const Note: React.FC<Props> = ({ note }) => {
                   variant="outline"
                />
                <MenuList>
-                  <MenuItem icon={<EditIcon />}>Edit Note</MenuItem>
-                  <MenuItem icon={<WarningIcon />}>Delete Note</MenuItem>
+                  <MenuItem
+                     icon={<EditIcon />}
+                  >
+                     Edit Note</MenuItem>
+                  <MenuItem
+                     icon={<WarningIcon />}
+                     onClick={async () => {
+                        const noteLocation: NoteLocationInput = {
+                           listId,
+                           noteId: id
+                        }
+                        const response = await executeDeleteNote({ noteLocation })
+                        console.log(response)
+                     }}
+                  >
+                     Delete Note</MenuItem>
                </MenuList>
             </Menu>
          }

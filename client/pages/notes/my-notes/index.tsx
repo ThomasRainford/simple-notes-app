@@ -12,7 +12,7 @@ import NotesListsContainer from '../../../components/notes/notes-lists/NotesList
 import SingleList from '../../../components/notes/notes-lists/SingleList'
 import SingleListContainer from '../../../components/notes/notes-lists/SingleListContainer'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { Note as NoteType, NotesList, useGetAllNotesListsQuery } from '../../../generated/graphql'
+import { Note as NoteType, NoteLocationInput, NotesList, useDeleteNoteMutation, useGetAllNotesListsQuery } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 import { GET_ALL_NOTES_lISTS_QUERY } from '../../../utils/ssr-queries/getAllNotesListQuery'
 import { useIsAuth } from '../../../utils/useIsAuth'
@@ -22,7 +22,7 @@ interface Props {
 }
 
 // TODO: 
-// - Open currentList after new notes page - Attach url query with listid, search getAllNotesLists.
+// - Need to always attach listid to url to delete emtpy note.
 // - Page for updating notes. 
 
 const MyNotes = ({ }) => {
@@ -33,17 +33,34 @@ const MyNotes = ({ }) => {
    const [currentList, setCurrentList] = useState<NotesList>(undefined)
 
    const [result] = useGetAllNotesListsQuery()
+   const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
 
    useIsAuth(result)
 
    useEffect(() => {
       // Show the currentList after visiting new-notes page.
-      const listId = router.query.listId
+      const listId = router.query?.listId as string
       if (listId && result.data) {
          const list: NotesList = result.data.getAllNotesLists.find((list: NotesList) => list.id === listId) as NotesList
+
+         if (list) {
+            list.notes.map(async (note) => {
+               if (note.title === '' && note.text === '') {
+
+                  const noteLocation: NoteLocationInput = {
+                     listId,
+                     noteId: note.id
+                  }
+
+                  await executeDeleteNote({ noteLocation })
+               }
+            })
+         }
+
          setCurrentList(list)
       }
-   }, [router, result])
+
+   }, [router, result, executeDeleteNote, setCurrentList])
 
    return (
       <>
@@ -86,7 +103,7 @@ const MyNotes = ({ }) => {
                            <NoteContainer>
                               {currentList.notes.length > 0 &&
                                  currentList.notes.map((note: NoteType) => (
-                                    <Note key={note.id} note={note} />
+                                    <Note key={note.id} note={note} listId={currentList.id} />
                                  ))
                               }
                            </NoteContainer>

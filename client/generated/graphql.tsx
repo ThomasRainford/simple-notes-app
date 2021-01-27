@@ -99,7 +99,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createList: NotesList;
   updateNotesList: NotesListResponse;
-  addNote?: Maybe<NotesListResponse>;
+  addNote?: Maybe<NoteResponse>;
   updateNote?: Maybe<NoteResponse>;
   deleteNotesList: Scalars['Boolean'];
   deleteNote: Scalars['Boolean'];
@@ -196,10 +196,10 @@ export type AddNoteMutationVariables = Exact<{
 export type AddNoteMutation = (
   { __typename?: 'Mutation' }
   & { addNote?: Maybe<(
-    { __typename?: 'NotesListResponse' }
-    & { notesList?: Maybe<(
-      { __typename?: 'NotesList' }
-      & Pick<NotesList, 'id'>
+    { __typename?: 'NoteResponse' }
+    & { note?: Maybe<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id'>
     )>, errors?: Maybe<Array<(
       { __typename?: 'Error' }
       & Pick<Error, 'property' | 'message'>
@@ -218,6 +218,16 @@ export type CreateListMutation = (
     { __typename?: 'NotesList' }
     & Pick<NotesList, '_id' | 'title'>
   ) }
+);
+
+export type DeleteNoteMutationVariables = Exact<{
+  noteLocation: NoteLocationInput;
+}>;
+
+
+export type DeleteNoteMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteNote'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -270,6 +280,26 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateNoteMutationVariables = Exact<{
+  noteLocation: NoteLocationInput;
+  updatedNoteFields: NoteUpdateInput;
+}>;
+
+
+export type UpdateNoteMutation = (
+  { __typename?: 'Mutation' }
+  & { updateNote?: Maybe<(
+    { __typename?: 'NoteResponse' }
+    & { note?: Maybe<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id' | 'title' | 'text'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'property' | 'message'>
+    )>> }
+  )> }
+);
+
 export type GetAllNotesListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -303,7 +333,7 @@ export type MeQuery = (
 export const AddNoteDocument = gql`
     mutation AddNote($listId: String!, $noteInput: NoteInput!) {
   addNote(listId: $listId, noteInput: $noteInput) {
-    notesList {
+    note {
       id
     }
     errors {
@@ -328,6 +358,15 @@ export const CreateListDocument = gql`
 
 export function useCreateListMutation() {
   return Urql.useMutation<CreateListMutation, CreateListMutationVariables>(CreateListDocument);
+};
+export const DeleteNoteDocument = gql`
+    mutation DeleteNote($noteLocation: NoteLocationInput!) {
+  deleteNote(noteLocation: $noteLocation)
+}
+    `;
+
+export function useDeleteNoteMutation() {
+  return Urql.useMutation<DeleteNoteMutation, DeleteNoteMutationVariables>(DeleteNoteDocument);
 };
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
@@ -375,6 +414,25 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateNoteDocument = gql`
+    mutation UpdateNote($noteLocation: NoteLocationInput!, $updatedNoteFields: NoteUpdateInput!) {
+  updateNote(noteLocation: $noteLocation, updatedNoteFields: $updatedNoteFields) {
+    note {
+      id
+      title
+      text
+    }
+    errors {
+      property
+      message
+    }
+  }
+}
+    `;
+
+export function useUpdateNoteMutation() {
+  return Urql.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(UpdateNoteDocument);
 };
 export const GetAllNotesListsDocument = gql`
     query GetAllNotesLists {
