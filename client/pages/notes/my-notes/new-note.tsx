@@ -1,12 +1,13 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Textarea, Link, Text, Center, Divider, Heading, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay } from '@chakra-ui/react'
+import { Button, Center, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Link, Textarea } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
+import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import NotesLayout from '../../../components/notes/NotesLayout'
+import { NoteInput, NoteLocationInput, NoteUpdateInput, useAddNoteMutation, useDeleteNoteMutation, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
-import NextLink from "next/link"
-import { useRouter } from 'next/router'
-import { useAddNoteMutation, NoteInput, useUpdateNoteMutation, NoteLocationInput, NoteUpdateInput, useDeleteNoteMutation } from '../../../generated/graphql'
 
 interface Props {
 
@@ -18,13 +19,14 @@ const NewNote = ({ }) => {
    const { handleSubmit, errors, register, formState } = useForm()
    const [saved, setSaved] = useState<boolean>(false)
 
+   const [isGoBackOpen, setIsGoBackOpen] = useState<boolean>(false)
+   const onGoBackClose = () => setIsGoBackOpen(false)
+   const [isSaveOpen, setIsSaveOpen] = useState<boolean>(false)
+   const onSaveClose = () => setIsSaveOpen(false)
+
    const [addNoteResult, executeAddNote] = useAddNoteMutation()
    const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
    const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
-
-   const [isOpen, setIsOpen] = useState<boolean>(false)
-   const onClose = () => setIsOpen(false)
-   const cancelRef = React.useRef()
 
    const validateTitle = () => {
       return true
@@ -35,19 +37,27 @@ const NewNote = ({ }) => {
    }
 
    const onSubmit = async (updatedNoteFields: NoteUpdateInput) => {
-      const listId = router.query.listId as string
 
-      const noteLocation: NoteLocationInput = {
-         listId,
-         noteId: addNoteResult.data.addNote.note.id
+      const { title, text } = updatedNoteFields
+
+      if (title.length > 0 && text.length > 0) {
+         const listId = router.query.listId as string
+
+         const noteLocation: NoteLocationInput = {
+            listId,
+            noteId: addNoteResult.data.addNote.note.id
+         }
+
+         const response = await executeUpdateNote({ noteLocation, updatedNoteFields })
+
+      } else {
+         setIsSaveOpen(true)
       }
-
-      const response = await executeUpdateNote({ noteLocation, updatedNoteFields })
    }
 
    const handleGoBack = async () => {
       if (!saved) {
-         setIsOpen(true)
+         setIsGoBackOpen(true)
       } else {
          router.replace(`/notes/my-notes?listId=${router.query.listId}`)
       }
@@ -131,46 +141,15 @@ const NewNote = ({ }) => {
                      onClick={() => setSaved(true)}
                   >
                      Save
-               </Button>
+                  </Button>
 
                </form>
             </Flex >
          </NotesLayout>
 
-         <AlertDialog
-            isOpen={isOpen}
-            leastDestructiveRef={cancelRef}
-            onClose={onClose}
-         >
-            <AlertDialogOverlay>
-               <AlertDialogContent>
-                  <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                     Delete Customer
-                  </AlertDialogHeader>
+         <GoBackAlertDialog isOpen={isGoBackOpen} onClose={onGoBackClose} deleteNote={deleteNote} />
+         <SaveAlertDialog isOpen={isSaveOpen} onClose={onSaveClose} />
 
-                  <AlertDialogBody>
-                     Are you sure? You can't undo this action afterwards.
-                  </AlertDialogBody>
-
-                  <AlertDialogFooter>
-                     <Button ref={cancelRef} onClick={onClose}>
-                        Cancel
-                     </Button>
-                     <Button
-                        ml={3}
-                        colorScheme="red"
-                        onClick={async () => {
-                           await deleteNote()
-                           onClose()
-                           router.replace(`/notes/my-notes?listId=${router.query.listId}`)
-                        }}
-                     >
-                        Delete
-                     </Button>
-                  </AlertDialogFooter>
-               </AlertDialogContent>
-            </AlertDialogOverlay>
-         </AlertDialog>
       </>
    )
 }
