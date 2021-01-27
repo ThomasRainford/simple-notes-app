@@ -60,6 +60,7 @@ const Register = ({ }) => {
                <Input
                   name="username"
                   placeholder="Username"
+                  autoComplete="off"
                   ref={register({ validate: validateUsername })}
                />
                <FormErrorMessage>
@@ -73,6 +74,7 @@ const Register = ({ }) => {
                   name="email"
                   placeholder="Email"
                   type="email"
+                  autoComplete="off"
                   ref={register({ validate: validateEmail })}
                />
                <FormErrorMessage>
