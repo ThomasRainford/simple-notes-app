@@ -3,6 +3,7 @@ import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import AutoResizeTextarea from '../../../components/AutosizeTextArea'
 import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
 import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import NotesLayout from '../../../components/notes/NotesLayout'
@@ -113,14 +114,15 @@ const NewNote = ({ }) => {
 
                   <FormControl mb="5%">
                      <FormLabel>Text</FormLabel>
-                     <Textarea
+                     <AutoResizeTextarea ref={register({ validate: validateText })} />
+                     {/* <Textarea
                         name="text"
                         variant="flushed"
                         placeholder="Text"
                         type="text"
                         size="lg"
                         ref={register({ validate: validateText })}
-                     />
+                     /> */}
                      <FormErrorMessage>
                         {errors.text && errors.text.message}
                      </FormErrorMessage>
