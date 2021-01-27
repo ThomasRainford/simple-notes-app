@@ -1,5 +1,5 @@
-import { Client, dedupExchange, fetchExchange } from "urql"
-import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
+import { Cache, cacheExchange } from "@urql/exchange-graphcache";
+import { dedupExchange, fetchExchange } from "urql";
 
 const invalidateAllLists = (cache: Cache) => {
    const allFields = cache.inspectFields('Query')
