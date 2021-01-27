@@ -13,14 +13,14 @@ const Note: React.FC<Props> = ({ note, listId }) => {
    const { id, title, text } = note
 
    const [viewMenu, setViewMenu] = useState<boolean>(false)
-   const setMenu = () => {
-      setViewMenu(!viewMenu)
+   const setMenu = (value: boolean) => {
+      setViewMenu(value)
    }
 
    const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
 
    return (
-      <Flex p="1.5%" shadow="md" bg="#EAEAEA" align="center" justify="space-between" onMouseEnter={setMenu} onMouseLeave={setMenu}>
+      <Flex p="1.5%" shadow="md" bg="#EAEAEA" align="center" justify="space-between" onMouseEnter={() => setMenu(true)} onMouseLeave={() => setMenu(false)}>
          <Flex direction="column">
             <Heading size="md">{title}</Heading>
             <Text whiteSpace="pre-wrap">{text}</Text>
