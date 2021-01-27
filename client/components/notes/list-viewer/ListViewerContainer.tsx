@@ -25,12 +25,6 @@ const ListViewerContainer: React.FC<Props> = ({ children, currentList }) => {
                      as={Link}
                      leftIcon={<EditIcon />}
                      _hover={{ backgroundColor: "grey", textColor: "white" }}
-                     onClick={async () => {
-                        const noteInput: NoteInput = { title: '', text: '' }
-                        const listId = currentList.id
-                        //const response = await executeAddNote({ listId, noteInput })
-                        //console.log('AddNote: ', response)
-                     }}
                   >
                      New Note
                   </Button>
