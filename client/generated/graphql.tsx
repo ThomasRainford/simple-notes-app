@@ -230,6 +230,16 @@ export type DeleteNoteMutation = (
   & Pick<Mutation, 'deleteNote'>
 );
 
+export type DeleteNotesListMutationVariables = Exact<{
+  listId: Scalars['String'];
+}>;
+
+
+export type DeleteNotesListMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteNotesList'>
+);
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -388,6 +398,15 @@ export const DeleteNoteDocument = gql`
 
 export function useDeleteNoteMutation() {
   return Urql.useMutation<DeleteNoteMutation, DeleteNoteMutationVariables>(DeleteNoteDocument);
+};
+export const DeleteNotesListDocument = gql`
+    mutation DeleteNotesList($listId: String!) {
+  deleteNotesList(listId: $listId)
+}
+    `;
+
+export function useDeleteNotesListMutation() {
+  return Urql.useMutation<DeleteNotesListMutation, DeleteNotesListMutationVariables>(DeleteNotesListDocument);
 };
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {

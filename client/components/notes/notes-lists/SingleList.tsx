@@ -2,7 +2,7 @@ import { ChevronRightIcon, EditIcon, HamburgerIcon, WarningIcon } from '@chakra-
 import { Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Text, Tooltip } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { NotesList } from '../../../generated/graphql'
+import { NotesList, useDeleteNotesListMutation } from '../../../generated/graphql'
 
 interface Props {
    list: NotesList
@@ -12,6 +12,8 @@ interface Props {
 const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
 
    const router = useRouter()
+
+   const [result, executeDeleteNotesList] = useDeleteNotesListMutation()
 
    return (
       <Flex justify="space-between" align="center" w="100%" m="5%" >
@@ -32,7 +34,13 @@ const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
                      }}
                   >
                      Edit Title</MenuItem>
-                  <MenuItem icon={<WarningIcon />}>Delete List</MenuItem>
+                  <MenuItem
+                     icon={<WarningIcon />}
+                     onClick={async () => {
+                        await executeDeleteNotesList({ listId: list.id })
+                     }}
+                  >
+                     Delete List</MenuItem>
                </MenuList>
             </Menu>
             <Tooltip hasArrow label="View Notes" bg="blue.500">

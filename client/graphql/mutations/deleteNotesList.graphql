@@ -1,0 +1,3 @@
+mutation DeleteNotesList($listId: String!) {
+	deleteNotesList(listId: $listId)
+}

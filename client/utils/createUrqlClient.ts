@@ -32,7 +32,11 @@ export const createUrqlClient = (ssrExchange: any) => {
                   },
                   deleteNote: (result, args, cache, info) => {
                      invalidateAllLists(cache)
-                  }
+                  },
+                  deleteNotesList: (result, args, cache, info) => {
+                     invalidateAllLists(cache)
+                  },
+
                }
             }
          }),
