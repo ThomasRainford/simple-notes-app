@@ -1,0 +1,11 @@
+query GetNotesList($listId: String!) {
+	getNotesList(listId: $listId) {
+		notesList {
+			id
+		}
+		errors {
+			property
+			message
+		}
+	}
+}

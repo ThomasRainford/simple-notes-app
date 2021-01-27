@@ -318,6 +318,25 @@ export type GetAllNotesListsQuery = (
   )>> }
 );
 
+export type GetNotesListQueryVariables = Exact<{
+  listId: Scalars['String'];
+}>;
+
+
+export type GetNotesListQuery = (
+  { __typename?: 'Query' }
+  & { getNotesList?: Maybe<(
+    { __typename?: 'NotesListResponse' }
+    & { notesList?: Maybe<(
+      { __typename?: 'NotesList' }
+      & Pick<NotesList, 'id'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'property' | 'message'>
+    )>> }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -455,6 +474,23 @@ export const GetAllNotesListsDocument = gql`
 
 export function useGetAllNotesListsQuery(options: Omit<Urql.UseQueryArgs<GetAllNotesListsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetAllNotesListsQuery>({ query: GetAllNotesListsDocument, ...options });
+};
+export const GetNotesListDocument = gql`
+    query GetNotesList($listId: String!) {
+  getNotesList(listId: $listId) {
+    notesList {
+      id
+    }
+    errors {
+      property
+      message
+    }
+  }
+}
+    `;
+
+export function useGetNotesListQuery(options: Omit<Urql.UseQueryArgs<GetNotesListQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetNotesListQuery>({ query: GetNotesListDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

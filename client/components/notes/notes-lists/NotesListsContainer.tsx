@@ -1,6 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Flex, CloseButton, Button, useDisclosure } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { NotesList } from '../../../generated/graphql'
 import NewListDrawer from './NewListDrawer'
 
 interface Props {

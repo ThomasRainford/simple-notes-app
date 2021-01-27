@@ -1,7 +1,8 @@
 import { Button, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, DrawerFooter, FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { CreateListMutationVariables, useCreateListMutation } from '../../../generated/graphql'
+import { CreateListMutationVariables, NotesList, useCreateListMutation, useGetNotesListQuery } from '../../../generated/graphql'
 
 interface Props {
    disclosure: any
@@ -13,8 +14,9 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
    const { isOpen, onClose } = disclosure
    const intialFocusRef = React.useRef()
 
-   const { handleSubmit, errors, register, formState } = useForm()
+   const router = useRouter()
 
+   const { handleSubmit, errors, register, formState } = useForm()
 
    const [result, executeCreateList] = useCreateListMutation()
 
@@ -26,7 +28,7 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
 
       const response = await executeCreateList(createListInput)
 
-      console.log(response)
+      router.replace(`/notes/my-notes?listId=${response.data.createList._id}`)
 
       onClose()
 
