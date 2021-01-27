@@ -12,9 +12,10 @@ import NotesListsContainer from '../../../components/notes/notes-lists/NotesList
 import SingleList from '../../../components/notes/notes-lists/SingleList'
 import SingleListContainer from '../../../components/notes/notes-lists/SingleListContainer'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { Note as NoteType, NoteLocationInput, NotesList, useDeleteNoteMutation, useGetAllNotesListsQuery } from '../../../generated/graphql'
+import { Note as NoteType, NoteLocationInput, NotesList, useDeleteNoteMutation, useGetAllNotesListsQuery, useMeQuery } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 import { GET_ALL_NOTES_lISTS_QUERY } from '../../../utils/ssr-queries/getAllNotesListQuery'
+import { ME_Query } from '../../../utils/ssr-queries/meQuery'
 import { useIsAuth } from '../../../utils/useIsAuth'
 
 interface Props {
@@ -32,6 +33,7 @@ const MyNotes = ({ }) => {
    const [currentList, setCurrentList] = useState<NotesList>(undefined)
 
    const [result] = useGetAllNotesListsQuery()
+   const [user] = useMeQuery()
    const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
 
    useIsAuth(result)
@@ -63,7 +65,7 @@ const MyNotes = ({ }) => {
       <>
          { !result.fetching && !result.error // only render page when user is logged in.
             ?
-            <NotesLayout>
+            <NotesLayout user={user}>
                {result.data?.getAllNotesLists &&
                   <Flex h="100vh">
                      {showLists
@@ -127,6 +129,7 @@ export async function getServerSideProps() {
    // This query is used to populate the cache for the query
    // used on this page.
    await client.query(GET_ALL_NOTES_lISTS_QUERY).toPromise();
+   await client.query(ME_Query).toPromise()
 
    return {
       props: {
