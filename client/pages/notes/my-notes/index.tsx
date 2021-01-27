@@ -22,7 +22,6 @@ interface Props {
 }
 
 // TODO: 
-// - Need to always attach listid to url to delete emtpy note.
 // - Page for updating notes. 
 
 const MyNotes = ({ }) => {
@@ -43,20 +42,18 @@ const MyNotes = ({ }) => {
       if (listId && result.data) {
          const list: NotesList = result.data.getAllNotesLists.find((list: NotesList) => list.id === listId) as NotesList
 
+         // Delete empty notes beofre setting current list.
          if (list) {
             list.notes.map(async (note) => {
                if (note.title === '' && note.text === '') {
-
                   const noteLocation: NoteLocationInput = {
                      listId,
                      noteId: note.id
                   }
-
                   await executeDeleteNote({ noteLocation })
                }
             })
          }
-
          setCurrentList(list)
       }
 
