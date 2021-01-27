@@ -16,7 +16,7 @@ const AutoResizeTextarea = React.forwardRef<HTMLTextAreaElement>((props, ref) =>
          w="100%"
          resize="none"
          ref={ref}
-         minRows={1}
+         minRows={4}
          as={ResizeTextarea}
          {...props}
       />
