@@ -85,7 +85,7 @@ const NewNote = ({ }) => {
 
    useEffect(() => {
       const noteInput: NoteInput = { title: '', text: '' }
-      const listId = router.query.listId as string
+      const listId = (router.query.listId as string)
 
       async function addNote() {
          if (!localStorage.getItem('noteId')) {

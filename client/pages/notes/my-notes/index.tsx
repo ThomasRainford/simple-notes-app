@@ -40,6 +40,7 @@ const MyNotes = ({ }) => {
 
    useEffect(() => {
       // Show the currentList after visiting new-notes page.
+      localStorage.removeItem('noteId')
       const listId = router.query?.listId as string
       if (listId && result.data) {
          const list: NotesList = result.data.getAllNotesLists.find((list: NotesList) => list.id === listId) as NotesList
@@ -129,7 +130,9 @@ export async function getServerSideProps() {
    // This query is used to populate the cache for the query
    // used on this page.
    await client.query(GET_ALL_NOTES_lISTS_QUERY).toPromise();
-   await client.query(ME_Query).toPromise()
+
+   // For some reason this line prevents me query from succeeding if the page is refreshed.
+   //await client.query(ME_Query).toPromise()
 
    return {
       props: {
