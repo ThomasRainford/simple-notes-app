@@ -19,7 +19,8 @@ const EditNote = ({ }) => {
 
    const router = useRouter()
    const listId = router.query.listId as string
-   const { handleSubmit, errors, register, formState, setValue } = useForm()
+   const { handleSubmit, errors, register, formState, setValue, watch } = useForm()
+   const watched = watch()
    const [saved, setSaved] = useState<boolean>(false)
 
    const [isGoBackOpen, setIsGoBackOpen] = useState<boolean>(false)
@@ -39,8 +40,6 @@ const EditNote = ({ }) => {
       }
    })
 
-   console.log('edit-note')
-
    const validateTitle = () => {
       return true
    }
@@ -50,7 +49,10 @@ const EditNote = ({ }) => {
    }
 
    const handleGoBack = async () => {
-      if (!saved) {
+      // Only open go back alert when the user has not saved and changes have been made. 
+      const title = result.data?.getNote?.note?.title
+      const text = result.data?.getNote?.note?.text
+      if (!saved && watched.title !== title || watched.text !== text) {
          setIsGoBackOpen(true)
       } else {
          localStorage.removeItem('noteId')
