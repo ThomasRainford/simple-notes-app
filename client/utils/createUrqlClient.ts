@@ -51,6 +51,9 @@ export const createUrqlClient = (ssrExchange: any) => {
                   },
 
                }
+            },
+            keys: {
+               NoteResponse: () => null
             }
          }),
          ssrExchange,
