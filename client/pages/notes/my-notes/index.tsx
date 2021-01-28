@@ -45,7 +45,7 @@ const MyNotes = ({ }) => {
       if (listId && result.data) {
          const list: NotesList = result.data.getAllNotesLists.find((list: NotesList) => list.id === listId) as NotesList
 
-         // Delete empty notes beofre setting current list.
+         // Delete empty notes before setting current list.
          if (list) {
             list.notes.map(async (note) => {
                if (note.title === '' && note.text === '') {

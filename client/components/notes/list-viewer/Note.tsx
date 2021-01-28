@@ -41,6 +41,7 @@ const Note: React.FC<Props> = ({ note, listId }) => {
                   <MenuItem
                      icon={<EditIcon />}
                      onClick={() => {
+                        localStorage.setItem('noteId', id)
                         router.push(`/notes/my-notes/edit-note?listId=${listId}`)
                      }}
                   >

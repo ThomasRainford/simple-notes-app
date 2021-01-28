@@ -1,12 +1,12 @@
 import { Flex, Heading, Center, Divider, FormControl, FormLabel, Input, FormErrorMessage, Button, Link } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import AutoResizeTextarea from '../../../components/AutosizeTextArea'
 import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { useGetNotesListQuery, useMeQuery } from '../../../generated/graphql'
+import { useGetNoteQuery, useGetNotesListQuery, useMeQuery } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 
 interface Props {
@@ -16,9 +16,18 @@ interface Props {
 const EditNote = ({ }) => {
 
    const router = useRouter()
-   const { handleSubmit, errors, register, formState } = useForm()
+   const listId = router.query.listId as string
 
-   const [result] = useGetNotesListQuery({ variables: { listId: router.query.listId as string } })
+   const { handleSubmit, errors, register, formState, setValue } = useForm()
+
+   const [result] = useGetNoteQuery({
+      variables: {
+         noteLocation: {
+            noteId: localStorage.getItem('noteId'),
+            listId
+         }
+      }
+   })
 
    const [user] = useMeQuery()
 
@@ -34,9 +43,18 @@ const EditNote = ({ }) => {
 
    }
 
+   useEffect(() => {
+
+      if (!result.fetching && result.data?.getNote) {
+         setValue('title', result.data?.getNote?.note?.title)
+         setValue('text', result.data?.getNote?.note?.text)
+      }
+
+   }, [result])
+
    return (
       <>
-         {!user.fetching && user.data.me && router.query.listId && result.data?.getNotesList
+         {!user.fetching && user.data.me && listId && result.data?.getNote
             ?
             <NotesLayout user={user}>
                <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">

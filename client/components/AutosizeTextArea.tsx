@@ -1,11 +1,13 @@
 import { Textarea } from "@chakra-ui/react";
 import ResizeTextarea from "react-textarea-autosize";
-import React, { LegacyRef, RefAttributes } from "react";
+import React, { LegacyRef, ReactNode, RefAttributes } from "react";
 
 interface Props {
+   children: ReactNode
+   value: string
 }
 
-const AutoResizeTextarea = React.forwardRef<HTMLTextAreaElement>((props, ref) => {
+const AutoResizeTextarea: any = React.forwardRef<HTMLTextAreaElement>((props: Props, ref) => {
    return (
       <Textarea
          name="text"
