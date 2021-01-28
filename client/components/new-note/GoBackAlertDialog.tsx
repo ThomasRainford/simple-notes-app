@@ -6,7 +6,7 @@ import React from 'react'
 interface Props {
    isOpen: boolean
    onClose: () => void
-   deleteNote: () => Promise<void>
+   deleteNote?: () => Promise<void>
 }
 
 const GoBackAlertDialog: React.FC<Props> = ({ isOpen, onClose, deleteNote }) => {

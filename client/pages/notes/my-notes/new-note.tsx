@@ -43,7 +43,6 @@ const NewNote = ({ }) => {
    }
 
    const onSubmit = async (updatedNoteFields: NoteUpdateInput) => {
-
       const { title, text } = updatedNoteFields
 
       if (title.length > 0 && text.length > 0) {

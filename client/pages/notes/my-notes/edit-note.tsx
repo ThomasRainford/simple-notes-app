@@ -1,12 +1,14 @@
 import { Flex, Heading, Center, Divider, FormControl, FormLabel, Input, FormErrorMessage, Button, Link } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import AutoResizeTextarea from '../../../components/AutosizeTextArea'
+import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
+import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { useGetNoteQuery, useGetNotesListQuery, useMeQuery } from '../../../generated/graphql'
+import { NoteLocationInput, NoteUpdateInput, useGetNoteQuery, useGetNotesListQuery, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 
 interface Props {
@@ -17,9 +19,16 @@ const EditNote = ({ }) => {
 
    const router = useRouter()
    const listId = router.query.listId as string
-
    const { handleSubmit, errors, register, formState, setValue } = useForm()
+   const [saved, setSaved] = useState<boolean>(false)
 
+   const [isGoBackOpen, setIsGoBackOpen] = useState<boolean>(false)
+   const onGoBackClose = () => setIsGoBackOpen(false)
+   const [isSaveOpen, setIsSaveOpen] = useState<boolean>(false)
+   const onSaveClose = () => setIsSaveOpen(false)
+
+   const [user] = useMeQuery()
+   const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
    const [result] = useGetNoteQuery({
       variables: {
          noteLocation: {
@@ -29,8 +38,6 @@ const EditNote = ({ }) => {
       }
    })
 
-   const [user] = useMeQuery()
-
    const validateTitle = () => {
       return true
    }
@@ -39,8 +46,31 @@ const EditNote = ({ }) => {
       return true
    }
 
-   const onSubmit = () => {
+   const handleGoBack = async () => {
+      if (!saved) {
+         setIsGoBackOpen(true)
+      } else {
+         localStorage.removeItem('noteId')
+         router.replace(`/notes/my-notes?listId=${router.query.listId}`)
+      }
+   }
 
+   const onSubmit = async (updatedNoteFields: NoteUpdateInput) => {
+      const { title, text } = updatedNoteFields
+
+      if (title.length > 0 && text.length > 0) {
+         const listId = router.query.listId as string
+
+         const noteLocation: NoteLocationInput = {
+            listId,
+            noteId: localStorage.getItem('noteId')
+         }
+
+         const response = await executeUpdateNote({ noteLocation, updatedNoteFields })
+
+      } else {
+         setIsSaveOpen(true)
+      }
    }
 
    useEffect(() => {
@@ -90,7 +120,7 @@ const EditNote = ({ }) => {
                         colorScheme="teal"
                         mr="1%"
                         as={Link}
-                     // onClick={() => handleGoBack()}
+                        onClick={() => handleGoBack()}
                      >
                         Go Back
                   </Button>
@@ -98,7 +128,7 @@ const EditNote = ({ }) => {
                         colorScheme="blue"
                         isLoading={formState.isSubmitting}
                         type="submit"
-                     // onClick={() => setSaved(true)}
+                        onClick={() => setSaved(true)}
                      >
                         Save
                   </Button>
@@ -109,6 +139,10 @@ const EditNote = ({ }) => {
             :
             <LoadingIndicator />
          }
+
+         <GoBackAlertDialog isOpen={isGoBackOpen} onClose={onGoBackClose} />
+         <SaveAlertDialog isOpen={isSaveOpen} onClose={onSaveClose} />
+
       </>
    )
 }
