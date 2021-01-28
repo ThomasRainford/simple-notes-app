@@ -1,25 +1,26 @@
-import { Button, Center, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Link, Textarea } from '@chakra-ui/react'
+import { Flex, Heading, Center, Divider, FormControl, FormLabel, Input, FormErrorMessage, Button, Link } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import AutoResizeTextarea from '../../../components/AutosizeTextArea'
-import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
+import GoBackAlertDialog from '../../../components/edit-note/GoBackAlertDialog'
 import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { NoteInput, NoteLocationInput, NoteUpdateInput, useAddNoteMutation, useDeleteNoteMutation, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
+import { NoteLocationInput, NoteUpdateInput, useGetNoteQuery, useGetNotesListQuery, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
-import { useIsAuth } from '../../../utils/useIsAuth'
 
 interface Props {
 
 }
 
-const NewNote = ({ }) => {
+const EditNote = ({ }) => {
 
    const router = useRouter()
-   const { handleSubmit, errors, register, formState } = useForm()
+   const listId = router.query.listId as string
+   const { handleSubmit, errors, register, formState, setValue, watch } = useForm()
+   const watched = watch()
    const [saved, setSaved] = useState<boolean>(false)
 
    const [isGoBackOpen, setIsGoBackOpen] = useState<boolean>(false)
@@ -27,12 +28,17 @@ const NewNote = ({ }) => {
    const [isSaveOpen, setIsSaveOpen] = useState<boolean>(false)
    const onSaveClose = () => setIsSaveOpen(false)
 
-   const [addNoteResult, executeAddNote] = useAddNoteMutation()
-   const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
-   const [deleteNoteResult, executeDeleteNote] = useDeleteNoteMutation()
    const [user] = useMeQuery()
+   const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
 
-   useIsAuth(user)
+   const [result] = useGetNoteQuery({
+      variables: {
+         noteLocation: {
+            noteId: localStorage.getItem('noteId'),
+            listId
+         }
+      }
+   })
 
    const validateTitle = () => {
       return true
@@ -40,6 +46,18 @@ const NewNote = ({ }) => {
 
    const validateText = () => {
       return true
+   }
+
+   const handleGoBack = async () => {
+      // Only open go back alert when the user has not saved and changes have been made. 
+      const title = result.data?.getNote?.note?.title
+      const text = result.data?.getNote?.note?.text
+      if (!saved && watched.title !== title || watched.text !== text) {
+         setIsGoBackOpen(true)
+      } else {
+         localStorage.removeItem('noteId')
+         router.replace(`/notes/my-notes?listId=${router.query.listId}`)
+      }
    }
 
    const onSubmit = async (updatedNoteFields: NoteUpdateInput) => {
@@ -60,54 +78,22 @@ const NewNote = ({ }) => {
       }
    }
 
-   const handleGoBack = async () => {
-      if (!saved) {
-         setIsGoBackOpen(true)
-      } else {
-         localStorage.removeItem('noteId')
-         router.replace(`/notes/my-notes?listId=${router.query.listId}`)
-      }
-   }
-
-   const deleteNote = async () => {
-      const listId = router.query.listId as string
-
-      const noteLocation: NoteLocationInput = {
-         listId,
-         noteId: localStorage.getItem('noteId')
-      }
-
-      if (noteLocation.noteId) {
-         const response = await executeDeleteNote({ noteLocation })
-      }
-   }
-
    useEffect(() => {
-      const noteInput: NoteInput = { title: '', text: '' }
-      const listId = (router.query.listId as string)
 
-      async function addNote() {
-         if (!localStorage.getItem('noteId')) {
-            const response = await executeAddNote({ listId, noteInput })
-            localStorage.setItem('noteId', response.data.addNote.note.id)
-         }
+      if (!result.fetching && result.data?.getNote) {
+         setValue('title', result.data?.getNote?.note?.title)
+         setValue('text', result.data?.getNote?.note?.text)
       }
 
-      // Add an empty note when the page renders.
-      if (listId) {
-         addNote()
-      } else {
-         router.replace('/notes/my-notes')
-      }
-   }, [router, executeAddNote])
+   }, [result])
 
    return (
       <>
-         {!user.fetching && user.data.me && router.query.listId
+         {!user.fetching && user.data.me && listId && result.data?.getNote
             ?
             <NotesLayout user={user}>
                <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
-                  <Heading fontSize="2xl">New Note</Heading>
+                  <Heading fontSize="2xl">Edit Note</Heading>
                   <Center py="1%" width="100%">
                      <Divider orientation="horizontal" />
                   </Center>
@@ -159,11 +145,11 @@ const NewNote = ({ }) => {
             <LoadingIndicator />
          }
 
-         <GoBackAlertDialog isOpen={isGoBackOpen} onClose={onGoBackClose} deleteNote={deleteNote} />
+         <GoBackAlertDialog isOpen={isGoBackOpen} onClose={onGoBackClose} />
          <SaveAlertDialog isOpen={isSaveOpen} onClose={onSaveClose} />
 
       </>
    )
 }
 
-export default withUrqlClient(createUrqlClient)(NewNote)
+export default withUrqlClient(createUrqlClient)(EditNote)

@@ -1,0 +1,13 @@
+query GetNote($noteLocation: NoteLocationInput!) {
+	getNote(noteLocation: $noteLocation) {
+		note {
+			id
+			title
+			text
+		}
+		errors {
+			property
+			message
+		}
+	}
+}

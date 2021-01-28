@@ -1,15 +1,13 @@
 import { AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, Button } from '@chakra-ui/react'
-import router from 'next/dist/next-server/lib/router/router'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 interface Props {
    isOpen: boolean
    onClose: () => void
-   deleteNote: () => Promise<void>
 }
 
-const GoBackAlertDialog: React.FC<Props> = ({ isOpen, onClose, deleteNote }) => {
+const GoBackAlertDialog: React.FC<Props> = ({ isOpen, onClose }) => {
 
    const router = useRouter()
    const cancelRef = React.useRef()
@@ -23,7 +21,7 @@ const GoBackAlertDialog: React.FC<Props> = ({ isOpen, onClose, deleteNote }) => 
          <AlertDialogOverlay>
             <AlertDialogContent>
                <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                  Empty note will be deleted
+                  Unsaved Progress
                   </AlertDialogHeader>
 
                <AlertDialogBody>
@@ -38,13 +36,12 @@ const GoBackAlertDialog: React.FC<Props> = ({ isOpen, onClose, deleteNote }) => 
                      ml={3}
                      colorScheme="red"
                      onClick={async () => {
-                        await deleteNote()
+                        //await deleteNote()
                         onClose()
-                        localStorage.removeItem('noteId')
                         router.replace(`/notes/my-notes?listId=${router.query.listId}`)
                      }}
                   >
-                     Delete
+                     Go Back
                   </Button>
                </AlertDialogFooter>
             </AlertDialogContent>

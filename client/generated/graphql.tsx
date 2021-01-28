@@ -328,6 +328,25 @@ export type GetAllNotesListsQuery = (
   )>> }
 );
 
+export type GetNoteQueryVariables = Exact<{
+  noteLocation: NoteLocationInput;
+}>;
+
+
+export type GetNoteQuery = (
+  { __typename?: 'Query' }
+  & { getNote?: Maybe<(
+    { __typename?: 'NoteResponse' }
+    & { note?: Maybe<(
+      { __typename?: 'Note' }
+      & Pick<Note, 'id' | 'title' | 'text'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'property' | 'message'>
+    )>> }
+  )> }
+);
+
 export type GetNotesListQueryVariables = Exact<{
   listId: Scalars['String'];
 }>;
@@ -493,6 +512,25 @@ export const GetAllNotesListsDocument = gql`
 
 export function useGetAllNotesListsQuery(options: Omit<Urql.UseQueryArgs<GetAllNotesListsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetAllNotesListsQuery>({ query: GetAllNotesListsDocument, ...options });
+};
+export const GetNoteDocument = gql`
+    query GetNote($noteLocation: NoteLocationInput!) {
+  getNote(noteLocation: $noteLocation) {
+    note {
+      id
+      title
+      text
+    }
+    errors {
+      property
+      message
+    }
+  }
+}
+    `;
+
+export function useGetNoteQuery(options: Omit<Urql.UseQueryArgs<GetNoteQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetNoteQuery>({ query: GetNoteDocument, ...options });
 };
 export const GetNotesListDocument = gql`
     query GetNotesList($listId: String!) {
