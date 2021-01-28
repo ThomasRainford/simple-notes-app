@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import AutoResizeTextarea from '../../../components/AutosizeTextArea'
-import GoBackAlertDialog from '../../../components/new-note/GoBackAlertDialog'
+import GoBackAlertDialog from '../../../components/edit-note/GoBackAlertDialog'
 import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
@@ -29,6 +29,7 @@ const EditNote = ({ }) => {
 
    const [user] = useMeQuery()
    const [updateNoteResult, executeUpdateNote] = useUpdateNoteMutation()
+
    const [result] = useGetNoteQuery({
       variables: {
          noteLocation: {
@@ -37,6 +38,8 @@ const EditNote = ({ }) => {
          }
       }
    })
+
+   console.log('edit-note')
 
    const validateTitle = () => {
       return true
