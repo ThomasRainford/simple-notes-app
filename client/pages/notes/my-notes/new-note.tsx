@@ -97,12 +97,14 @@ const NewNote = ({ }) => {
       // Add an empty note when the page renders.
       if (listId) {
          addNote()
+      } else {
+         router.replace('/notes/my-notes')
       }
    }, [router, executeAddNote])
 
    return (
       <>
-         {!user.fetching && user.data.me
+         {!user.fetching && user.data.me && router.query.listId
             ?
             <NotesLayout user={user}>
                <Flex direction="column" justify="center" align="center" mx="auto" width="50%" p="2%" mt="5%" boxShadow="dark-lg" borderWidth="2px">
