@@ -1,5 +1,6 @@
 import { EditIcon, HamburgerIcon, WarningIcon } from '@chakra-ui/icons'
 import { Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Note as NoteType, NoteLocationInput, useDeleteNoteMutation } from '../../../generated/graphql'
 
@@ -12,6 +13,7 @@ const Note: React.FC<Props> = ({ note, listId }) => {
 
    const { id, title, text } = note
 
+   const router = useRouter()
    const [viewMenu, setViewMenu] = useState<boolean>(false)
    const setMenu = (value: boolean) => {
       setViewMenu(value)
@@ -38,6 +40,9 @@ const Note: React.FC<Props> = ({ note, listId }) => {
                <MenuList>
                   <MenuItem
                      icon={<EditIcon />}
+                     onClick={() => {
+                        router.push(`/notes/my-notes/edit-note?listId=${listId}`)
+                     }}
                   >
                      Edit Note</MenuItem>
                   <MenuItem

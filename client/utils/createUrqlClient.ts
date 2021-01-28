@@ -34,7 +34,6 @@ export const createUrqlClient = (ssrExchange: any) => {
                      invalidateMeQuery(cache)
                   },
                   register: (result, args, cache, info) => {
-                     console.log('REGISTER: ', result, args)
                      invalidateAllLists(cache)
                      invalidateMeQuery(cache)
                   },
