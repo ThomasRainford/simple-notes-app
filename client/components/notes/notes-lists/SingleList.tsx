@@ -57,10 +57,10 @@ const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
                      }}
                   />
                </Tooltip>
-            </Flex >
-         </Flex >
+            </Flex>
+         </Flex>
 
-         <NewListDrawer disclosure={disclosure} btnRef={btnRef} />
+         {list && <NewListDrawer disclosure={disclosure} btnRef={btnRef} list={list} />}
 
       </>
    )

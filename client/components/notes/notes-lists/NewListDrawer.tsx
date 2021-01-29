@@ -1,15 +1,16 @@
-import { Button, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, DrawerFooter, FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react'
+import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormErrorMessage, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { CreateListMutationVariables, NotesList, useCreateListMutation, useGetNotesListQuery } from '../../../generated/graphql'
+import { CreateListMutationVariables, NotesList } from '../../../generated/graphql'
 
 interface Props {
    disclosure: any
    btnRef: React.MutableRefObject<undefined>
+   list?: NotesList
 }
 
-const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
+const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list }) => {
 
    const { isOpen, onClose } = disclosure
    const intialFocusRef = React.useRef()
@@ -18,7 +19,6 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
 
    const { handleSubmit, errors, register, formState } = useForm()
 
-   const [result, executeCreateList] = useCreateListMutation()
 
    const validateTitle = () => {
       return true
@@ -26,9 +26,9 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
 
    const onSubmit = async (createListInput: CreateListMutationVariables) => {
 
-      const response = await executeCreateList(createListInput)
+      //const response = await executeCreateList(createListInput)
 
-      router.replace(`/notes/my-notes?listId=${response.data.createList._id}`)
+      //router.replace(`/notes/my-notes?listId=${response.data.createList._id}`)
 
       onClose()
 
@@ -53,6 +53,7 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
                      <FormControl mb="10%">
                         <Input
                            name="title"
+                           defaultValue={list?.title} // Use defaultValue instead of setValue
                            placeholder="Title"
                            autoComplete="off"
                            ref={register({ validate: validateTitle })}

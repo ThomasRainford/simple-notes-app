@@ -49,7 +49,9 @@ export const createUrqlClient = (ssrExchange: any) => {
                   deleteNotesList: (result, args, cache, info) => {
                      invalidateAllLists(cache)
                   },
-
+                  updateNotesList: (result, args, cache, info) => {
+                     invalidateAllLists(cache)
+                  },
                }
             },
             keys: {
