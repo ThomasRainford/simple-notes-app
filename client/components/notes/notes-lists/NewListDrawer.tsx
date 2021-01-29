@@ -63,7 +63,7 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list, isUpdating }
          <DrawerOverlay>
             <DrawerContent>
                <DrawerCloseButton />
-               <DrawerHeader>Create new Notes List</DrawerHeader>
+               <DrawerHeader>{isUpdating ? 'Edit List Title' : 'Create new Notes List'}</DrawerHeader>
 
                <DrawerBody>
                   <form onSubmit={handleSubmit(onSubmit)}>
