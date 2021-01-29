@@ -310,6 +310,26 @@ export type UpdateNoteMutation = (
   )> }
 );
 
+export type UpdateNotesListMutationVariables = Exact<{
+  listId: Scalars['String'];
+  newTitle: Scalars['String'];
+}>;
+
+
+export type UpdateNotesListMutation = (
+  { __typename?: 'Mutation' }
+  & { updateNotesList: (
+    { __typename?: 'NotesListResponse' }
+    & { notesList?: Maybe<(
+      { __typename?: 'NotesList' }
+      & Pick<NotesList, 'id' | 'title'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & Pick<Error, 'property' | 'message'>
+    )>> }
+  ) }
+);
+
 export type GetAllNotesListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -492,6 +512,24 @@ export const UpdateNoteDocument = gql`
 
 export function useUpdateNoteMutation() {
   return Urql.useMutation<UpdateNoteMutation, UpdateNoteMutationVariables>(UpdateNoteDocument);
+};
+export const UpdateNotesListDocument = gql`
+    mutation UpdateNotesList($listId: String!, $newTitle: String!) {
+  updateNotesList(listId: $listId, newTitle: $newTitle) {
+    notesList {
+      id
+      title
+    }
+    errors {
+      property
+      message
+    }
+  }
+}
+    `;
+
+export function useUpdateNotesListMutation() {
+  return Urql.useMutation<UpdateNotesListMutation, UpdateNotesListMutationVariables>(UpdateNotesListDocument);
 };
 export const GetAllNotesListsDocument = gql`
     query GetAllNotesLists {

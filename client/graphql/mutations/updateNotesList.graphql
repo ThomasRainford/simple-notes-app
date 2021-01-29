@@ -1,0 +1,12 @@
+mutation UpdateNotesList($listId: String!, $newTitle: String!) {
+	updateNotesList(listId: $listId, newTitle: $newTitle) {
+		notesList {
+			id
+			title
+		}
+		errors {
+			property
+			message
+		}
+	}
+}

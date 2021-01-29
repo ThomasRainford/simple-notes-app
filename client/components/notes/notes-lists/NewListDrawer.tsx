@@ -1,15 +1,17 @@
-import { Button, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, DrawerFooter, FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react'
+import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormErrorMessage, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { CreateListMutationVariables, NotesList, useCreateListMutation, useGetNotesListQuery } from '../../../generated/graphql'
+import { CreateListMutationVariables, NotesList, UpdateNotesListMutationVariables, useCreateListMutation, useUpdateNotesListMutation } from '../../../generated/graphql'
 
 interface Props {
    disclosure: any
    btnRef: React.MutableRefObject<undefined>
+   list?: NotesList
+   isUpdating?: boolean
 }
 
-const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
+const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list, isUpdating }) => {
 
    const { isOpen, onClose } = disclosure
    const intialFocusRef = React.useRef()
@@ -18,20 +20,36 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
 
    const { handleSubmit, errors, register, formState } = useForm()
 
-   const [result, executeCreateList] = useCreateListMutation()
+   const [updateNotesListResult, executeUpdateNotesList] = useUpdateNotesListMutation()
+   const [createListResult, executeCreateList] = useCreateListMutation()
 
    const validateTitle = () => {
       return true
    }
 
-   const onSubmit = async (createListInput: CreateListMutationVariables) => {
-
+   const onSubmitCreateList = async (createListInput: CreateListMutationVariables) => {
       const response = await executeCreateList(createListInput)
 
       router.replace(`/notes/my-notes?listId=${response.data.createList._id}`)
 
       onClose()
 
+   }
+
+   const onSubmitUpdateNotesList = async (updateNotesListInput: UpdateNotesListMutationVariables) => {
+      const response = await executeUpdateNotesList({ listId: list.id, newTitle: updateNotesListInput.newTitle })
+      console.log(response)
+      router.replace(`/notes/my-notes?listId=${response.data.updateNotesList.notesList.id}`)
+
+      onClose()
+   }
+
+   const onSubmit = async (input: any) => {
+      if (isUpdating) {
+         onSubmitUpdateNotesList(input)
+      } else {
+         onSubmitCreateList(input)
+      }
    }
 
    return (
@@ -45,14 +63,15 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef }) => {
          <DrawerOverlay>
             <DrawerContent>
                <DrawerCloseButton />
-               <DrawerHeader>Create new Notes List</DrawerHeader>
+               <DrawerHeader>{isUpdating ? 'Edit List Title' : 'Create new Notes List'}</DrawerHeader>
 
                <DrawerBody>
                   <form onSubmit={handleSubmit(onSubmit)}>
 
                      <FormControl mb="10%">
                         <Input
-                           name="title"
+                           name="newTitle"
+                           defaultValue={list?.title} // Use defaultValue instead of setValue
                            placeholder="Title"
                            autoComplete="off"
                            ref={register({ validate: validateTitle })}
