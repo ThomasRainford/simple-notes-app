@@ -60,7 +60,7 @@ const SingleList: React.FC<Props> = ({ list, setCurrentList }) => {
             </Flex>
          </Flex>
 
-         {list && <NewListDrawer disclosure={disclosure} btnRef={btnRef} list={list} />}
+         {list && <NewListDrawer disclosure={disclosure} btnRef={btnRef} list={list} isUpdating={true} />}
 
       </>
    )

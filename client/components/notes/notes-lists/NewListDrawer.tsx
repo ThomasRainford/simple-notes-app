@@ -2,15 +2,16 @@ import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHea
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { CreateListMutationVariables, NotesList } from '../../../generated/graphql'
+import { CreateListMutationVariables, NotesList, UpdateNotesListMutationVariables, useCreateListMutation, useUpdateNotesListMutation } from '../../../generated/graphql'
 
 interface Props {
    disclosure: any
    btnRef: React.MutableRefObject<undefined>
    list?: NotesList
+   isUpdating?: boolean
 }
 
-const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list }) => {
+const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list, isUpdating }) => {
 
    const { isOpen, onClose } = disclosure
    const intialFocusRef = React.useRef()
@@ -19,19 +20,36 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list }) => {
 
    const { handleSubmit, errors, register, formState } = useForm()
 
+   const [updateNotesListResult, executeUpdateNotesList] = useUpdateNotesListMutation()
+   const [createListResult, executeCreateList] = useCreateListMutation()
 
    const validateTitle = () => {
       return true
    }
 
-   const onSubmit = async (createListInput: CreateListMutationVariables) => {
+   const onSubmitCreateList = async (createListInput: CreateListMutationVariables) => {
+      const response = await executeCreateList(createListInput)
 
-      //const response = await executeCreateList(createListInput)
-
-      //router.replace(`/notes/my-notes?listId=${response.data.createList._id}`)
+      router.replace(`/notes/my-notes?listId=${response.data.createList._id}`)
 
       onClose()
 
+   }
+
+   const onSubmitUpdateNotesList = async (updateNotesListInput: UpdateNotesListMutationVariables) => {
+      const response = await executeUpdateNotesList({ listId: list.id, newTitle: updateNotesListInput.newTitle })
+      console.log(response)
+      router.replace(`/notes/my-notes?listId=${response.data.updateNotesList.notesList.id}`)
+
+      onClose()
+   }
+
+   const onSubmit = async (input: any) => {
+      if (isUpdating) {
+         onSubmitUpdateNotesList(input)
+      } else {
+         onSubmitCreateList(input)
+      }
    }
 
    return (
@@ -52,7 +70,7 @@ const NewListDrawer: React.FC<Props> = ({ disclosure, btnRef, list }) => {
 
                      <FormControl mb="10%">
                         <Input
-                           name="title"
+                           name="newTitle"
                            defaultValue={list?.title} // Use defaultValue instead of setValue
                            placeholder="Title"
                            autoComplete="off"

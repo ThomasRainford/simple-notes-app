@@ -515,7 +515,7 @@ export function useUpdateNoteMutation() {
 };
 export const UpdateNotesListDocument = gql`
     mutation UpdateNotesList($listId: String!, $newTitle: String!) {
-  updateNotesList(listId: "6008b7f9c392de089c8776c3", newTitle: "NEW Title") {
+  updateNotesList(listId: $listId, newTitle: $newTitle) {
     notesList {
       id
       title
