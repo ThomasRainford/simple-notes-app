@@ -1,5 +1,5 @@
-import { ArrowRightIcon, EditIcon } from '@chakra-ui/icons'
-import { Box, Button, Flex, Heading, IconButton, Text } from '@chakra-ui/react'
+import { ArrowRightIcon } from '@chakra-ui/icons'
+import { Box, Flex, Heading, IconButton } from '@chakra-ui/react'
 import { initUrqlClient, withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -15,7 +15,6 @@ import NotesLayout from '../../../components/notes/NotesLayout'
 import { Note as NoteType, NoteLocationInput, NotesList, useDeleteNoteMutation, useGetAllNotesListsQuery, useMeQuery } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 import { GET_ALL_NOTES_lISTS_QUERY } from '../../../utils/ssr-queries/getAllNotesListQuery'
-import { ME_Query } from '../../../utils/ssr-queries/meQuery'
 import { useIsAuth } from '../../../utils/useIsAuth'
 
 interface Props {

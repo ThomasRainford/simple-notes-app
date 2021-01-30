@@ -1,6 +1,6 @@
 import { Textarea } from "@chakra-ui/react";
 import ResizeTextarea from "react-textarea-autosize";
-import React, { LegacyRef, ReactNode, RefAttributes } from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
    children: ReactNode

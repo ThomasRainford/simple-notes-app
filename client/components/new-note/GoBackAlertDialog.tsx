@@ -1,5 +1,4 @@
 import { AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, Button } from '@chakra-ui/react'
-import router from 'next/dist/next-server/lib/router/router'
 import { useRouter } from 'next/router'
 import React from 'react'
 

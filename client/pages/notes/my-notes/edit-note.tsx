@@ -1,4 +1,4 @@
-import { Flex, Heading, Center, Divider, FormControl, FormLabel, Input, FormErrorMessage, Button, Link } from '@chakra-ui/react'
+import { Button, Center, Divider, Flex, FormControl, FormErrorMessage, FormLabel, Heading, Input, Link } from '@chakra-ui/react'
 import { withUrqlClient } from 'next-urql'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -8,7 +8,7 @@ import GoBackAlertDialog from '../../../components/edit-note/GoBackAlertDialog'
 import SaveAlertDialog from '../../../components/new-note/SaveAlertDialog'
 import LoadingIndicator from '../../../components/notes/LoadingIndicator'
 import NotesLayout from '../../../components/notes/NotesLayout'
-import { NoteLocationInput, NoteUpdateInput, useGetNoteQuery, useGetNotesListQuery, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
+import { NoteLocationInput, NoteUpdateInput, useGetNoteQuery, useMeQuery, useUpdateNoteMutation } from '../../../generated/graphql'
 import { createUrqlClient } from '../../../utils/createUrqlClient'
 
 interface Props {

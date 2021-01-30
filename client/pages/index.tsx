@@ -1,15 +1,10 @@
 import { Button, Flex, Heading, Link, Text } from '@chakra-ui/react'
-import NextLink from 'next/link'
-import Head from 'next/head'
-import React from 'react'
-import styles from '../styles/Home.module.css'
-import { useIsAuth } from '../utils/useIsAuth'
 import { withUrqlClient } from 'next-urql'
+import NextLink from 'next/link'
+import React from 'react'
 import { createUrqlClient } from '../utils/createUrqlClient'
 
 function Home() {
-
-   //useIsAuth()
 
    return (
       <Flex direction="column" justify="center" align="center" w="100vw" h="100vh" bg="#488BFF">
@@ -44,9 +39,8 @@ function Home() {
                </Button>
             </NextLink>
          </Flex>
-
       </Flex>
    )
 }
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(Home)
+export default withUrqlClient(createUrqlClient)(Home)
