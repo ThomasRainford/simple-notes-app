@@ -20,6 +20,8 @@ const main = async () => {
 
    const app = express()
 
+   app.set('proxy', 1)
+
    app.use(
       cors({
          origin: process.env.CORS_ORIGIN,
