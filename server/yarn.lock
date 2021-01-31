@@ -213,6 +213,14 @@
   dependencies:
     "@types/node" "*"
 
+"@types/connect-mongodb-session@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@types/connect-mongodb-session/-/connect-mongodb-session-2.4.0.tgz#3fb633389e6283bcae1f917f2feb648d2e875e18"
+  integrity sha512-MJvyX17eV/V6/q9xynexbSKIbHk/gzrJ5pXDlSQ7F63NiQOUamY6BfXIaO+xtveZusdKsXOwzx7VsWUdI1byCg==
+  dependencies:
+    "@types/express-session" "*"
+    "@types/mongodb" "*"
+
 "@types/connect-redis@^0.0.16":
   version "0.0.16"
   resolved "https://registry.yarnpkg.com/@types/connect-redis/-/connect-redis-0.0.16.tgz#fd98a26ffbe6ac3037baa4aecc940951b9f78cdc"
@@ -390,7 +398,7 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/mongodb@3.6.3":
+"@types/mongodb@*", "@types/mongodb@3.6.3":
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.6.3.tgz#5655af409d9e32d5d5ae9a653abf3e5f9c83eb7a"
   integrity sha512-6YNqGP1hk5bjUFaim+QoFFuI61WjHiHE1BNeB41TA00Xd2K7zG4lcWyLLq/XtIp36uMavvS5hoAUJ+1u/GcX2Q==
