@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/connect-mongodb-session": "^2.4.0"
+  }
+}
