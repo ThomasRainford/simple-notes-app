@@ -13,6 +13,7 @@ import ormConfig from './mikro-orm.config'
 import { NotesListResolver } from './resolvers/notesList'
 import { UserResolver } from "./resolvers/user"
 import { OrmContext } from './types/types'
+import { MongoDBStore } from 'connect-mongodb-session'
 
 const main = async () => {
 
@@ -20,8 +21,8 @@ const main = async () => {
 
    const app = express()
 
-   const RedisStore = connectRedis(session)
-   const redis = new Redis()
+   //const RedisStore = connectRedis(session)
+   //const redis = new Redis()
 
    app.use(
       cors({
@@ -33,10 +34,10 @@ const main = async () => {
    app.use(
       session({
          name: COOKIE_NAME,
-         store: new RedisStore({
-            client: redis,
-            disableTTL: true,
-            disableTouch: true
+         store: new MongoDBStore({
+            uri: process.env.MONGO_HOST,
+            databaseName: 'simple-notes-app-db',
+            collection: 'sessions'
          }),
          cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
