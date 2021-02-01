@@ -1,6 +1,6 @@
 import { MikroORM } from '@mikro-orm/core'
 import { ApolloServer } from "apollo-server-express"
-import cors from 'cors'
+//import cors from 'cors'
 import 'dotenv-safe/config'
 import express from "express"
 import session from 'express-session'
@@ -22,12 +22,12 @@ const main = async () => {
 
    app.set('proxy', 1)
 
-   app.use(
-      cors({
-         origin: process.env.CORS_ORIGIN,
-         credentials: true,
-      })
-   )
+   // app.use(
+   //    cors({
+   //       origin: process.env.CORS_ORIGIN,
+   //       credentials: true,
+   //    })
+   // )
 
    app.use(
       session({
@@ -64,7 +64,10 @@ const main = async () => {
 
    apolloServer.applyMiddleware({
       app,
-      cors: false
+      cors: {
+         origin: process.env.CORS_ORIGIN,
+         credentials: true
+      }
    })
 
    const port = process.env.PORT || 3000

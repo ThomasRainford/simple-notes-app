@@ -121,8 +121,9 @@ const MyNotes = ({ }) => {
 export async function getServerSideProps() {
    const ssrCache = ssrExchange({ isClient: false });
 
+   const url = /*'http://localhost:3000/graphql'*/ 'https://evening-scrubland-26587.herokuapp.com/graphql'
    const client = initUrqlClient({
-      url: "http://localhost:3000/graphql",
+      url,
       exchanges: [dedupExchange, cacheExchange, ssrCache, fetchExchange]
    }, true);
 
