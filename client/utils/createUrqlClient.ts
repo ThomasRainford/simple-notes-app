@@ -18,9 +18,9 @@ const invalidateMeQuery = (cache: Cache) => {
 }
 
 export const createUrqlClient = (ssrExchange: any) => {
-
+   const url = /*'http://localhost:3000/graphql'*/ 'https://evening-scrubland-26587.herokuapp.com/graphql'
    return {
-      url: 'http://localhost:3000/graphql',
+      url,
       exchanges: [
          dedupExchange,
          cacheExchange({
@@ -63,6 +63,7 @@ export const createUrqlClient = (ssrExchange: any) => {
       ],
       fetchOptions: {
          credentials: 'include' as const
+
       }
    }
 }
